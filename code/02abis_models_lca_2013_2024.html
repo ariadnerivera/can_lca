@@ -1,0 +1,2744 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Ariadne Rivera">
+
+<title>Mapping the shifts: analysis of recreational cannabis policies from 2013-2024 in US states</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="02abis_models_lca_2013_2024_files/libs/clipboard/clipboard.min.js"></script>
+<script src="02abis_models_lca_2013_2024_files/libs/quarto-html/quarto.js"></script>
+<script src="02abis_models_lca_2013_2024_files/libs/quarto-html/popper.min.js"></script>
+<script src="02abis_models_lca_2013_2024_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="02abis_models_lca_2013_2024_files/libs/quarto-html/anchor.min.js"></script>
+<link href="02abis_models_lca_2013_2024_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="02abis_models_lca_2013_2024_files/libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="02abis_models_lca_2013_2024_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="02abis_models_lca_2013_2024_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="02abis_models_lca_2013_2024_files/libs/bootstrap/bootstrap-1bc8a17f135ab3d594c857e9f48e611b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#background" id="toc-background" class="nav-link active" data-scroll-target="#background">Background</a>
+  <ul class="collapse">
+  <li><a href="#descriptive" id="toc-descriptive" class="nav-link" data-scroll-target="#descriptive">Descriptive</a>
+  <ul class="collapse">
+  <li><a href="#correlation-plots-of-cannabis-characteristics-continuous" id="toc-correlation-plots-of-cannabis-characteristics-continuous" class="nav-link" data-scroll-target="#correlation-plots-of-cannabis-characteristics-continuous">Correlation plots of cannabis characteristics (continuous)</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#main-models" id="toc-main-models" class="nav-link" data-scroll-target="#main-models">Main models</a>
+  <ul class="collapse">
+  <li><a href="#pooled-latent-class-analysis" id="toc-pooled-latent-class-analysis" class="nav-link" data-scroll-target="#pooled-latent-class-analysis">Pooled latent class analysis</a>
+  <ul class="collapse">
+  <li><a href="#standard-model" id="toc-standard-model" class="nav-link" data-scroll-target="#standard-model">Standard model</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#supplement-material" id="toc-supplement-material" class="nav-link" data-scroll-target="#supplement-material">Supplement material</a>
+  <ul class="collapse">
+  <li><a href="#multilevel-results" id="toc-multilevel-results" class="nav-link" data-scroll-target="#multilevel-results">Multilevel results</a></li>
+  <li><a href="#results-without-dc" id="toc-results-without-dc" class="nav-link" data-scroll-target="#results-without-dc">Results without DC</a></li>
+  <li><a href="#results-2020-2024" id="toc-results-2020-2024" class="nav-link" data-scroll-target="#results-2020-2024">Results 2020-2024</a>
+  <ul class="collapse">
+  <li><a href="#standard" id="toc-standard" class="nav-link" data-scroll-target="#standard">Standard</a></li>
+  <li><a href="#multilevel" id="toc-multilevel" class="nav-link" data-scroll-target="#multilevel">Multilevel</a></li>
+  </ul></li>
+  <li><a href="#results-in-rcl-states" id="toc-results-in-rcl-states" class="nav-link" data-scroll-target="#results-in-rcl-states">Results in RCL states</a></li>
+  <li><a href="#results-by-year" id="toc-results-by-year" class="nav-link" data-scroll-target="#results-by-year">Results by year</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Mapping the shifts: analysis of recreational cannabis policies from 2013-2024 in US states</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Ariadne Rivera </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="background" class="level1">
+<h1>Background</h1>
+<p>Over the past two decades, rapid shifts have occurred in the legal landscape of cannabis. Many states have moved from a prohibitionist type of approach to legalization for medical use and towards the subsequent legalization of cannabis legalization for recreational use. As of November 2024, 39 states have permitted the use and commercialization of medical cannabis products, 9 states allowed the use low THC, high CBD products, and 24 states had legalized cannabis for recreational purposes <span class="citation" data-cites="ncls2024">(<a href="#ref-ncls2024" role="doc-biblioref">NCLS 2024</a>)</span>. Consequently, approximately 80% of the population in the US resides in a county where they can access medical or adult-use cannabis through a retail outlet <span class="citation" data-cites="shah2024">(<a href="#ref-shah2024" role="doc-biblioref">Shah and Sono 2024</a>)</span>.</p>
+<p>This quarto file includes the final code to create figures and results from the models presented in the thesis.</p>
+<section id="descriptive" class="level2">
+<h2 class="anchored" data-anchor-id="descriptive">Descriptive</h2>
+<section id="correlation-plots-of-cannabis-characteristics-continuous" class="level3">
+<h3 class="anchored" data-anchor-id="correlation-plots-of-cannabis-characteristics-continuous">Correlation plots of cannabis characteristics (continuous)</h3>
+<section id="correlation-of-rml-chacatersitics-among-rml-states" class="level5">
+<h5 class="anchored" data-anchor-id="correlation-of-rml-chacatersitics-among-rml-states">Correlation of RML chacatersitics among RML states</h5>
+<p>This figure shows the correlation between recreational cannabis policies characteristics between 2013 to 2024 among RML state-years only.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02abis_models_lca_2013_2024_files/figure-html/corrplot%20rml%20states-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+</section>
+<section id="main-models" class="level1">
+<h1>Main models</h1>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "ID"     "styr"   "stabbr" "stfips" "year"   "rml"    "mml"    "rmlsl" 
+ [9] "regag"  "lcauth" "edib"   "hemp"   "adgn"   "adyth"  "pkr"    "warnr" 
+[17] "pkwrn"  "prcng"  "hmdl"   "thclim" "rtl"    "pblus"  "mmlhc"  "rmlhc" 
+[25] "tax"    "tax2"   "undrg2" "drvpr2" "drvpr3" "opncn"  "opncn2" "estlm" </code></pre>
+</div>
+</div>
+<section id="pooled-latent-class-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="pooled-latent-class-analysis">Pooled latent class analysis</h2>
+<section id="standard-model" class="level3">
+<h3 class="anchored" data-anchor-id="standard-model">Standard model</h3>
+<section id="standard-model-1-5-class-comparison" class="level4">
+<h4 class="anchored" data-anchor-id="standard-model-1-5-class-comparison">Standard model 1-5 class comparison</h4>
+<div class="cell">
+<div class="cell-output-display">
+<div id="esdommrehg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#esdommrehg table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#esdommrehg thead, #esdommrehg tbody, #esdommrehg tfoot, #esdommrehg tr, #esdommrehg td, #esdommrehg th {
+  border-style: none;
+}
+
+#esdommrehg p {
+  margin: 0;
+  padding: 0;
+}
+
+#esdommrehg .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#esdommrehg .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#esdommrehg .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#esdommrehg .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#esdommrehg .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#esdommrehg .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#esdommrehg .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#esdommrehg .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#esdommrehg .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#esdommrehg .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#esdommrehg .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#esdommrehg .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#esdommrehg .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#esdommrehg .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#esdommrehg .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#esdommrehg .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#esdommrehg .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#esdommrehg .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#esdommrehg .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#esdommrehg .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#esdommrehg .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#esdommrehg .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#esdommrehg .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#esdommrehg .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#esdommrehg .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#esdommrehg .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#esdommrehg .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#esdommrehg .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#esdommrehg .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#esdommrehg .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#esdommrehg .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#esdommrehg .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#esdommrehg .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#esdommrehg .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#esdommrehg .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#esdommrehg .gt_left {
+  text-align: left;
+}
+
+#esdommrehg .gt_center {
+  text-align: center;
+}
+
+#esdommrehg .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#esdommrehg .gt_font_normal {
+  font-weight: normal;
+}
+
+#esdommrehg .gt_font_bold {
+  font-weight: bold;
+}
+
+#esdommrehg .gt_font_italic {
+  font-style: italic;
+}
+
+#esdommrehg .gt_super {
+  font-size: 65%;
+}
+
+#esdommrehg .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#esdommrehg .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#esdommrehg .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#esdommrehg .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#esdommrehg .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#esdommrehg .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#esdommrehg .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#esdommrehg .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#esdommrehg div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<th colspan="11" class="gt_heading gt_title gt_font_normal"><b>Model Fit Summary Table: All States 2013 - 2024</b><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
+</tr>
+<tr class="gt_heading even">
+<th colspan="11" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">Standard model<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
+</tr>
+<tr class="gt_col_headings header">
+<th id="Title" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Classes</th>
+<th id="Parameters" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Par</th>
+<th id="LL" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><em>LL</em></th>
+<th id="BIC" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">BIC</th>
+<th id="aBIC" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">aBIC</th>
+<th id="CAIC" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">CAIC</th>
+<th id="AWE" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">AWE</th>
+<th id="BLRT_PValue" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">BLRT</th>
+<th id="T11_VLMR_PValue" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">VLMR</th>
+<th id="BF" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">BF</th>
+<th id="cmPk" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><em>cmPk</em></th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="Title">Class 1 Standard LCA</td>
+<td class="gt_row gt_right" headers="Parameters">22</td>
+<td class="gt_row gt_right" headers="LL">−3,747</td>
+<td class="gt_row gt_right" headers="BIC">7,635</td>
+<td class="gt_row gt_right" headers="aBIC">7,565</td>
+<td class="gt_row gt_right" headers="CAIC">7,657</td>
+<td class="gt_row gt_right" headers="AWE">7,842</td>
+<td class="gt_row gt_right" headers="BLRT_PValue">–</td>
+<td class="gt_row gt_right" headers="T11_VLMR_PValue">–</td>
+<td class="gt_row gt_right" headers="BF">0.0</td>
+<td class="gt_row gt_right" headers="cmPk">&lt;.001</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Title">Class 2 Standard LCA</td>
+<td class="gt_row gt_right" headers="Parameters">45</td>
+<td class="gt_row gt_right" headers="LL">−1,476</td>
+<td class="gt_row gt_right" headers="BIC">3,241</td>
+<td class="gt_row gt_right" headers="aBIC">3,098</td>
+<td class="gt_row gt_right" headers="CAIC">3,286</td>
+<td class="gt_row gt_right" headers="AWE">3,664</td>
+<td class="gt_row gt_right" headers="BLRT_PValue">&lt;.001</td>
+<td class="gt_row gt_right" headers="T11_VLMR_PValue">&lt;.001</td>
+<td class="gt_row gt_right" headers="BF">0.0</td>
+<td class="gt_row gt_right" headers="cmPk">&lt;.001</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Title">Class 3 Standard LCA</td>
+<td class="gt_row gt_right" headers="Parameters">68</td>
+<td class="gt_row gt_right" headers="LL">−1,302</td>
+<td class="gt_row gt_right" headers="BIC">3,040</td>
+<td class="gt_row gt_right" headers="aBIC">2,824</td>
+<td class="gt_row gt_right" headers="CAIC">3,108</td>
+<td class="gt_row gt_right" headers="AWE">3,680</td>
+<td class="gt_row gt_right" headers="BLRT_PValue">&lt;.001</td>
+<td class="gt_row gt_right" headers="T11_VLMR_PValue">0.17</td>
+<td class="gt_row gt_right" headers="BF">0.0</td>
+<td class="gt_row gt_right" headers="cmPk">&lt;.001</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Title">Class 4 Standard LCA</td>
+<td class="gt_row gt_right" headers="Parameters">91</td>
+<td class="gt_row gt_right" headers="LL">−1,182</td>
+<td class="gt_row gt_right" headers="BIC">2,948</td>
+<td class="gt_row gt_right" headers="aBIC">2,660</td>
+<td class="gt_row gt_right" headers="CAIC">3,039</td>
+<td class="gt_row gt_right" headers="AWE">3,805</td>
+<td class="gt_row gt_right" headers="BLRT_PValue">&lt;.001</td>
+<td class="gt_row gt_right" headers="T11_VLMR_PValue">&lt;.001</td>
+<td class="gt_row gt_right" headers="BF">&gt;100</td>
+<td class="gt_row gt_right" headers="cmPk">1.00</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Title">Class 5 Standard LCA</td>
+<td class="gt_row gt_right" headers="Parameters">114</td>
+<td class="gt_row gt_right" headers="LL">−1,130</td>
+<td class="gt_row gt_right" headers="BIC">2,991</td>
+<td class="gt_row gt_right" headers="aBIC">2,629</td>
+<td class="gt_row gt_right" headers="CAIC">3,105</td>
+<td class="gt_row gt_right" headers="AWE">4,065</td>
+<td class="gt_row gt_right" headers="BLRT_PValue">&lt;.001</td>
+<td class="gt_row gt_right" headers="T11_VLMR_PValue">0.78</td>
+<td class="gt_row gt_right" headers="BF">–</td>
+<td class="gt_row gt_right" headers="cmPk">&lt;.001</td>
+</tr>
+</tbody><tfoot class="gt_footnotes">
+<tr class="odd">
+<td colspan="11" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> <em>Note.</em> Par = parameters; <em>LL</em> = log likelihood; BIC = bayesian information criterion; aBIC = sample size adjusted BIC; CAIC = consistent Akaike information criterion; AWE = approximate weight of evidence criterion; BLRT = bootstrapped likelihood ratio test p-value; VLMR = Vuong-Lo-Mendell-Rubin adjusted likelihood ratio test p-value; cmPk = approximate correct model probability.</td>
+</tr>
+</tfoot>
+
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>   
+      0   1   2   3
+  1   0  28   0   0
+  2   0   0  38   0
+  3 481   0   0   0
+  4   0   0   0  65</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02abis_models_lca_2013_2024_files/figure-html/LCA%20resuls%20by%20state%20and%20year-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1) a dummy point inside the panel so ggplot can draw a legend key for "RCL start"</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>dummy_pt <span class="ot">&lt;-</span> <span class="fu">with</span>(lca4_sd, <span class="fu">data.frame</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">year   =</span> <span class="fu">as.factor</span>(<span class="fu">sort</span>(<span class="fu">unique</span>(year))[<span class="dv">1</span>]),</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">stabbr =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(stabbr))[<span class="dv">1</span>]</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>lca4_sd_gp <span class="ot">&lt;-</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(lca4_sd, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.factor</span>(year), <span class="at">y =</span> stabbr,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">fill =</span> <span class="fu">as.factor</span>(lawtype_sd))) <span class="sc">+</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">color =</span> <span class="st">"gray100"</span>) <span class="sc">+</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># draw the rectangle outline in the plot, but NO legend from this layer</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> rmlyear,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.factor</span>(year), <span class="at">y =</span> stabbr),</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">linewidth =</span> <span class="fl">0.25</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="cn">NA</span>,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>, <span class="at">show.legend =</span> <span class="cn">FALSE</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># actual sales start squares (will provide one legend entry)</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> rmlslyear,</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.factor</span>(year), <span class="at">y =</span> stabbr, <span class="at">shape =</span> <span class="st">"Sales start"</span>),</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">1.2</span>, <span class="at">inherit.aes =</span> <span class="cn">FALSE</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># legend-only entry for RCL start (invisible on plot, but appears in legend)</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> dummy_pt,</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> stabbr, <span class="at">shape =</span> <span class="st">"RCL start"</span>),</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">0</span>, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">inherit.aes =</span> <span class="cn">FALSE</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_discrete</span>(<span class="at">limits =</span> rev) <span class="sc">+</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> cols,</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>                    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Class 1: No RCL"</span>,<span class="st">"Class 2: Low Restrictions"</span>,<span class="st">"Class 3: Moderate Restrictions"</span>,<span class="st">"Class 4: High Restrictions"</span>),</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>                    <span class="at">name   =</span> <span class="st">"Latent Class"</span>) <span class="sc">+</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ONE combined legend block for both markers</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_shape_manual</span>(</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">name   =</span> <span class="st">""</span>,</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">"RCL start"</span>,<span class="st">"Sales start"</span>),</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"RCL start"</span> <span class="ot">=</span> <span class="dv">0</span>,  <span class="co"># open square = law enacted</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>               <span class="st">"Sales start"</span> <span class="ot">=</span> <span class="dv">15</span>),  <span class="co"># filled square = sales start</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"RCL start"</span>  <span class="ot">=</span> <span class="st">"RCL starts"</span>,</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>               <span class="st">"Sales start"</span> <span class="ot">=</span> <span class="st">"RCL sales start"</span>)</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill  =</span> <span class="fu">guide_legend</span>(<span class="at">order =</span> <span class="dv">1</span>,</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>                         <span class="at">byrow =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>                         <span class="at">keyheight =</span> <span class="fu">unit</span>(<span class="dv">10</span>, <span class="st">"pt"</span>)),</span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">shape =</span> <span class="fu">guide_legend</span>(<span class="at">order =</span> <span class="dv">2</span>,</span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>                         <span class="at">byrow =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>                         <span class="at">override.aes =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">alpha =</span> <span class="dv">1</span>),</span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>                         <span class="at">keyheight =</span> <span class="fu">unit</span>(<span class="dv">11</span>, <span class="st">"pt"</span>))</span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.spacing.y  =</span> <span class="fu">unit</span>(<span class="dv">3</span>, <span class="st">"pt"</span>),       <span class="co"># no extra gap between rows</span></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.key.height =</span> <span class="fu">unit</span>(<span class="dv">10</span>, <span class="st">"pt"</span>),</span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.box.spacing =</span> <span class="fu">unit</span>(<span class="dv">4</span>, <span class="st">"pt"</span>)</span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Year"</span>, <span class="at">y =</span> <span class="st">"State"</span>,</span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Standard LCA all states-years 2013–2024"</span>)</span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>lca4_sd_gp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02abis_models_lca_2013_2024_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="item-endorsement-probability-by-class" class="level4">
+<h4 class="anchored" data-anchor-id="item-endorsement-probability-by-class">Item endorsement probability by class</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>probabilities <span class="ot">&lt;-</span> lca_main_standard<span class="sc">$</span>c4_lca_standard.out<span class="sc">$</span>parameters<span class="sc">$</span>probability.scale</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>itemprobability <span class="ot">&lt;-</span> probabilities <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># map 3→1, 1→2, 2→3, 4→4 by releveling then relabeling</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">LatentClassRecoded =</span> <span class="fu">factor</span>(LatentClass, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>), <span class="at">labels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(param, category, est, LatentClassRecoded) <span class="sc">%&gt;%</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from  =</span> LatentClassRecoded,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_from =</span> est,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_prefix =</span> <span class="st">"Class "</span>,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_expand =</span> <span class="cn">TRUE</span>, <span class="at">names_sort =</span> <span class="cn">TRUE</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(param, category, <span class="st">`</span><span class="at">Class 1</span><span class="st">`</span>, <span class="st">`</span><span class="at">Class 2</span><span class="st">`</span>, <span class="st">`</span><span class="at">Class 3</span><span class="st">`</span>, <span class="st">`</span><span class="at">Class 4</span><span class="st">`</span>)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(itemprobability, <span class="at">n =</span> <span class="dv">52</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 33 × 6
+   param  category `Class 1` `Class 2` `Class 3` `Class 4`
+   &lt;chr&gt;  &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+ 1 LCAUTH 1                1     0.643     0         0.169
+ 2 LCAUTH 2                0     0.036     0.289     0.062
+ 3 LCAUTH 3                0     0.321     0.711     0.769
+ 4 THCLIM 1                1     1         0.263     0.215
+ 5 THCLIM 2                0     0         0.737     0.785
+ 6 RTL    1                1     0.464     0         0    
+ 7 RTL    2                0     0.536     0         1    
+ 8 RTL    3                0     0         1         0    
+ 9 PBLUS  1                1     0.108     0         0.046
+10 PBLUS  2                0     0         1         0    
+11 PBLUS  3                0     0.892     0         0.954
+12 HMDL   1                1     0.857     0.026     0    
+13 HMDL   2                0     0.037     0.737     0.446
+14 HMDL   3                0     0.106     0.237     0.554
+15 TAX2   1                1     0.571     0         0    
+16 TAX2   2                0     0.393     0.711     0.692
+17 TAX2   3                0     0.036     0.211     0    
+18 TAX2   4                0     0         0         0.185
+19 TAX2   5                0     0         0.079     0.123
+20 PRCNG  1                1     0.929     0.368     0.154
+21 PRCNG  2                0     0.071     0.632     0.846
+22 PKWRN  1                1     0.927     0.211     0.016
+23 PKWRN  2                0     0.073     0.789     0.984
+24 ADGN   1                1     0.929     0.105     0    
+25 ADGN   2                0     0.071     0.132     0.108
+26 ADGN   3                0     0         0.763     0.892
+27 DRVPR2 1                1     0         0         0    
+28 DRVPR2 2                0     0.287     0.184     0.215
+29 DRVPR2 3                0     0.57      0.684     0.339
+30 DRVPR2 4                0     0.143     0.132     0.446
+31 OPNCN  1                1     0         0         0    
+32 OPNCN  2                0     0.821     0.763     0.508
+33 OPNCN  3                0     0.179     0.237     0.492</code></pre>
+</div>
+</div>
+</section>
+<section id="item-endorsement-probability-graphs" class="level4">
+<h4 class="anchored" data-anchor-id="item-endorsement-probability-graphs">Item endorsement probability graphs</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>probabilities<span class="sc">$</span>itemcat <span class="ot">&lt;-</span> <span class="fu">paste</span>(probabilities<span class="sc">$</span>param, probabilities<span class="sc">$</span>category)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#label_map &lt;- c(</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  "ADGN 2"   = "Advertising - P/C",</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  "ADGN 3"   = "Advertising - Both",</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#  "DRVPR2 2" = "Driving - No specific",</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  "DRVPR2 3" = "Driving - No THC",</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#  "DRVPR2 4" = "Driving - THC lim",</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#  "HMDL 2"   = "Home Delivery - Allowed",</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#  "HMDL 3"   = "Home Delivery - Prohibited",</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#  "LCAUTH 2" = "Local opt - Control only",</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">#  "LCAUTH 3" = "Local opt - Both",</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">#  "OPNCN 2"  = "Open containers in vehicles no law",</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">#  "OPNCN 3"  = "Open containers in vehicles prohibited",</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">#  "PBLUS 2"  = "Public Use - Prohibited",</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co">#  "PBLUS 3"  = "Public Use - Restricted",</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co">#  "PKWRN 2"  = "Packaging or warning required",</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co">#  "PRCNG 2"  = "Pricing controls",</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co">#  "RTL 2"    = "Retail use - Off-prem",</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co">#  "RTL 3"    = "Retail - Off + On",</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co">#  "TAX2 2"  = "Tax - Sales only",</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co">#  "TAX2 3"    = "Tax - Weight only",</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co">#  "TAX2 4"    = "Tax - Sales + Weight",</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="co">#  "TAX2 5"    = "Tax - Potency",</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="co">#  "THCLIM 2"    = "Potency limits"</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="co">#)</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Create lables for the categories</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>label_map <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>  <span class="st">"LCAUTH 2"</span> <span class="ot">=</span> <span class="st">"Local opt - Ctrl"</span>,</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>  <span class="st">"LCAUTH 3"</span> <span class="ot">=</span> <span class="st">"Local opt - Both"</span>,</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>  <span class="st">"THCLIM 2"</span> <span class="ot">=</span> <span class="st">"THC lim"</span>,</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>  <span class="st">"RTL 2"</span>    <span class="ot">=</span> <span class="st">"Rtl - Off"</span>,</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>  <span class="st">"RTL 3"</span>    <span class="ot">=</span> <span class="st">"Rtl - Off+On"</span>,</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>  <span class="st">"PBLUS 2"</span>  <span class="ot">=</span> <span class="st">"Public use - Restr"</span>,</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>  <span class="st">"PBLUS 3"</span>  <span class="ot">=</span> <span class="st">"Public use - Proh"</span>,</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>  <span class="st">"HMDL 2"</span>   <span class="ot">=</span> <span class="st">"Delivery - Restr"</span>,</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>  <span class="st">"HMDL 3"</span>   <span class="ot">=</span> <span class="st">"Delivery - Proh"</span>,</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>  <span class="st">"TAX2 2"</span>   <span class="ot">=</span> <span class="st">"Tax - Sales"</span>,</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>  <span class="st">"TAX2 3"</span>   <span class="ot">=</span> <span class="st">"Tax - Weight"</span>,</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>  <span class="st">"TAX2 4"</span>   <span class="ot">=</span> <span class="st">"Tax - S+W"</span>,</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>  <span class="st">"TAX2 5"</span>   <span class="ot">=</span> <span class="st">"Tax - Potency"</span>,</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>  <span class="st">"PRCNG 2"</span>  <span class="ot">=</span> <span class="st">"Pricing - Ctrl"</span>,</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>  <span class="st">"PKWRN 2"</span>  <span class="ot">=</span> <span class="st">"Pack/warn - Req"</span>,</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>  <span class="st">"ADGN 2"</span>   <span class="ot">=</span> <span class="st">"Mkt - P/C"</span>,</span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>  <span class="st">"ADGN 3"</span>   <span class="ot">=</span> <span class="st">"Mkt - Both"</span>,</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>  <span class="st">"DRVPR2 2"</span> <span class="ot">=</span> <span class="st">"Driving - None"</span>,</span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>  <span class="st">"DRVPR2 3"</span> <span class="ot">=</span> <span class="st">"Driving - No THC"</span>,</span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>  <span class="st">"DRVPR2 4"</span> <span class="ot">=</span> <span class="st">"Driving - THC lim"</span>,</span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>  <span class="st">"OPNCN 2"</span>  <span class="ot">=</span> <span class="st">"Open cont - No law"</span>,</span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>  <span class="st">"OPNCN 3"</span>  <span class="ot">=</span> <span class="st">"Open cont - Proh"</span></span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a><span class="co">#Remove the reference category</span></span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>probabilities2 <span class="ot">&lt;-</span> <span class="fu">subset</span>(probabilities, category <span class="sc">!=</span><span class="dv">1</span>)</span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>probabilities2 <span class="ot">&lt;-</span> <span class="fu">subset</span>(probabilities2, itemcat  <span class="sc">!=</span> <span class="st">"DRVPR2 2"</span> )</span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>probabilities2 <span class="ot">&lt;-</span> <span class="fu">subset</span>(probabilities2, itemcat  <span class="sc">!=</span> <span class="st">"OPNCN 2"</span> )</span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a><span class="co">#Recoded</span></span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>probabilities2<span class="sc">$</span>LatentClass_recoded[probabilities2<span class="sc">$</span>LatentClass <span class="sc">==</span> <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="co">#States without RML</span></span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>probabilities2<span class="sc">$</span>LatentClass_recoded[probabilities2<span class="sc">$</span>LatentClass <span class="sc">==</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="co">#Early legalization</span></span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>probabilities2<span class="sc">$</span>LatentClass_recoded[probabilities2<span class="sc">$</span>LatentClass <span class="sc">==</span> <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="co">#More regulated than 1</span></span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a>probabilities2<span class="sc">$</span>LatentClass_recoded[probabilities2<span class="sc">$</span>LatentClass <span class="sc">==</span> <span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="dv">4</span> <span class="co">#More regulated than 2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="plot-for-latent-class-2" class="level5">
+<h5 class="anchored" data-anchor-id="plot-for-latent-class-2">Plot for latent class 2</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Latent class 2</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>lca2_plot_df <span class="ot">&lt;-</span> <span class="fu">subset</span>(probabilities2, LatentClass_recoded<span class="sc">==</span><span class="dv">2</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>plot_df <span class="ot">&lt;-</span> lca2_plot_df <span class="sc">|&gt;</span> </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">itemcat =</span> <span class="fu">factor</span>(itemcat)) <span class="sc">|&gt;</span> </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(itemcat) <span class="sc">|&gt;</span> </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sum_est_param =</span> <span class="fu">sum</span>(est, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span>   <span class="co"># for ordering</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>plot_df <span class="ot">&lt;-</span> plot_df <span class="sc">%&gt;%</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">itemcat_lab =</span> dplyr<span class="sc">::</span><span class="fu">recode</span>(itemcat, <span class="sc">!!!</span>label_map),</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">itemcat_lab =</span> <span class="fu">factor</span>(</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>      itemcat_lab,</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Local opt - Ctrl"</span>,</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Local opt - Both"</span>,</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">"THC lim"</span>,</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Rtl - Off"</span>,</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Rtl - Off+On"</span>,</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Public use - Restr"</span>,</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Public use - Proh"</span>,</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Delivery - Restr"</span>,</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Delivery - Proh"</span>,</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Tax - Sales"</span>,</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Tax - Weight"</span>,</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Tax - S+W"</span>,</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Tax - Potency"</span>,</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Pricing - Ctrl"</span>,</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Pack/warn - Req"</span>,</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Mkt - P/C"</span>,</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Mkt - Both"</span>,</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Driving - None"</span>,</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Driving - No THC"</span>,</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Driving - THC lim"</span>,</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Open cont - No law"</span>,</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Open cont - Proh"</span></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>max_r <span class="ot">&lt;-</span> <span class="fu">max</span>(plot_df<span class="sc">$</span>est, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>max_r <span class="ot">&lt;-</span> <span class="fu">ceiling</span>(max_r <span class="sc">*</span> <span class="fl">1.1</span> <span class="sc">*</span> <span class="dv">10</span>) <span class="sc">/</span> <span class="dv">10</span>               <span class="co"># pad &amp; round to 0.1s</span></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>grid_breaks <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, max_r, <span class="at">length.out =</span> <span class="dv">4</span>)  </span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>lt2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(plot_df) <span class="sc">+</span></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>  <span class="co"># custom radial gridlines</span></span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">yintercept =</span> y),</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(plot_df<span class="sc">$</span>est, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">length.out =</span> <span class="dv">4</span>)),</span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"lightgrey"</span>, <span class="at">linewidth =</span> <span class="fl">0.3</span></span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>  <span class="co"># bars: est by itemcat for each param</span></span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> <span class="fu">str_wrap</span>(itemcat_lab, <span class="dv">6</span>),</span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> est,</span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>      <span class="at">fill =</span> itemcat</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">position =</span> <span class="fu">position_dodge2</span>(<span class="at">width =</span> <span class="fl">0.9</span>, <span class="at">preserve =</span> <span class="st">"single"</span>),</span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.9</span>,</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>    <span class="at">width =</span> <span class="fl">0.85</span></span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Annotate custom scale inside plot</span></span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>  <span class="co">#annotate(</span></span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>  <span class="co">#  x = 11.7, </span></span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>   <span class="co"># y = 0.5, </span></span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>  <span class="co">#  label = "0.5", </span></span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>  <span class="co">#  geom = "text", </span></span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>  <span class="co">#  color = "gray12",</span></span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>  <span class="co">#  size = 3</span></span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a><span class="co">#    family = "Bell MT"</span></span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>  <span class="co">#) +</span></span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>  <span class="co">#annotate(</span></span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>  <span class="do">##  x = 11.7, </span></span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>  <span class="co">#  y =1, </span></span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>  <span class="co">#  label = "1", </span></span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>  <span class="co">#  geom = "text", </span></span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>  <span class="co">#  color = "gray12",</span></span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>  <span class="co">#  size = 3</span></span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a><span class="co">#    family = "Bell MT"</span></span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a>  <span class="co">#) +</span></span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_polar</span>() <span class="sc">+</span></span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>, <span class="at">fill =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">11</span>) <span class="sc">+</span></span>
+<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"none"</span>   <span class="co"># remove legend</span></span>
+<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a>lt2 <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Low restrictions"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02abis_models_lca_2013_2024_files/figure-html/radar%20plot%20for%20LCA1-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>key_df <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>label,                <span class="sc">~</span>description,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Local opt - Ctrl"</span>,    <span class="st">"Local control authorized"</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Local opt - Both"</span>,    <span class="st">"Local opt-out and control authorized"</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"THC lim"</span>,             <span class="st">"THC limits apply"</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Rtl - Off"</span>,           <span class="st">"Off-premises sales allowed only"</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Rtl - Off+On"</span>,        <span class="st">"On- and off-premises sales allowed"</span>,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Public use - Restr"</span>,  <span class="st">"Public use restricted"</span>,</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Public use - Proh"</span>,   <span class="st">"Public use prohibited"</span>,</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Delivery - Restr"</span>,    <span class="st">"Home delivery allowed"</span>,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Delivery - Proh"</span>,     <span class="st">"Home delivery prohibited"</span>,</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Tax - Sales"</span>,         <span class="st">"Sales-based taxes"</span>,</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Tax - Weight"</span>,        <span class="st">"Weight-based taxes"</span>,</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Tax - S+W"</span>,           <span class="st">"Sales + weight-based taxes"</span>,</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Tax - Potency"</span>,       <span class="st">"Potency-based taxes"</span>,</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Pricing - Ctrl"</span>,      <span class="st">"Price controls in place"</span>,</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Pack/warn - Req"</span>,     <span class="st">"THC &amp; serving size on label required"</span>,</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Mkt - P/C"</span>,           <span class="st">"Ad Placement or content restricted"</span>,</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Mkt - Both"</span>,          <span class="st">"Ad Placement and content restricted"</span>,</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Driving - None"</span>,      <span class="st">"General driving prohibitions"</span>,</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Driving - No THC"</span>,    <span class="st">"No THC limits, evidence required"</span>,</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Driving - THC lim"</span>,   <span class="st">"THC limits specified"</span>,</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Open cont - No law"</span>,  <span class="st">"No law on open containers"</span>,</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Open cont - Proh"</span>,    <span class="st">"Open containers prohibited"</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>plot_df <span class="ot">&lt;-</span> plot_df <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(key_df, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"itemcat_lab"</span> <span class="ot">=</span> <span class="st">"label"</span>))</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>caption_text <span class="ot">&lt;-</span> <span class="fu">paste0</span>(</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  key_df<span class="sc">$</span>label, <span class="st">": "</span>, key_df<span class="sc">$</span>description, <span class="at">collapse =</span> <span class="st">"; "</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>lt2 <span class="sc">+</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">caption =</span> caption_text) <span class="sc">+</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">size =</span> <span class="dv">7</span>, <span class="at">color =</span> <span class="st">"gray30"</span>)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02abis_models_lca_2013_2024_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Latent class 3</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>lca3_plot_df <span class="ot">&lt;-</span> <span class="fu">subset</span>(probabilities2, LatentClass_recoded<span class="sc">==</span><span class="dv">3</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>plot_df <span class="ot">&lt;-</span> lca3_plot_df <span class="sc">|&gt;</span> </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">itemcat =</span> <span class="fu">factor</span>(itemcat)) <span class="sc">|&gt;</span> </span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(itemcat) <span class="sc">|&gt;</span> </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sum_est_param =</span> <span class="fu">sum</span>(est, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span>   <span class="co"># for ordering</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">#plot_df &lt;- plot_df %&gt;%</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co">#  mutate(itemcat_lab = recode(itemcat, !!!label_map))</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>plot_df <span class="ot">&lt;-</span> plot_df <span class="sc">%&gt;%</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">itemcat_lab =</span> dplyr<span class="sc">::</span><span class="fu">recode</span>(itemcat, <span class="sc">!!!</span>label_map),</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">itemcat_lab =</span> <span class="fu">factor</span>(</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>      itemcat_lab,</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Local opt - Ctrl"</span>,</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Local opt - Both"</span>,</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>        <span class="st">"THC lim"</span>,</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Rtl - Off"</span>,</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Rtl - Off+On"</span>,</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Public use - Restr"</span>,</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Public use - Proh"</span>,</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Delivery - Restr"</span>,</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Delivery - Proh"</span>,</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Tax - Sales"</span>,</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Tax - Weight"</span>,</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Tax - S+W"</span>,</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Tax - Potency"</span>,</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Pricing - Ctrl"</span>,</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Pack/warn - Req"</span>,</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Mkt - P/C"</span>,</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Mkt - Both"</span>,</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Driving - None"</span>,</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Driving - No THC"</span>,</span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Driving - THC lim"</span>,</span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Open cont - No law"</span>,</span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Open cont - Proh"</span></span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>max_r <span class="ot">&lt;-</span> <span class="fu">max</span>(plot_df<span class="sc">$</span>est, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>max_r <span class="ot">&lt;-</span> <span class="fu">ceiling</span>(max_r <span class="sc">*</span> <span class="fl">1.1</span> <span class="sc">*</span> <span class="dv">10</span>) <span class="sc">/</span> <span class="dv">10</span>               <span class="co"># pad &amp; round to 0.1s</span></span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>grid_breaks <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, max_r, <span class="at">length.out =</span> <span class="dv">4</span>)  </span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>lt3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(plot_df) <span class="sc">+</span></span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a>  <span class="co"># custom radial gridlines</span></span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(</span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">yintercept =</span> y),</span>
+<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(plot_df<span class="sc">$</span>est, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">length.out =</span> <span class="dv">4</span>)),</span>
+<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"lightgrey"</span>, <span class="at">linewidth =</span> <span class="fl">0.3</span></span>
+<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a>  <span class="co"># bars: est by itemcat for each param</span></span>
+<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(</span>
+<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> <span class="fu">str_wrap</span>(itemcat_lab, <span class="dv">6</span>),</span>
+<span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> est,</span>
+<span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a>      <span class="at">fill =</span> itemcat</span>
+<span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a>    <span class="at">position =</span> <span class="fu">position_dodge2</span>(<span class="at">width =</span> <span class="fl">0.9</span>, <span class="at">preserve =</span> <span class="st">"single"</span>),</span>
+<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.9</span>,</span>
+<span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a>    <span class="at">width =</span> <span class="fl">0.85</span></span>
+<span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a>  <span class="co"># optional: a faint radial guide per param (turn on if you like)</span></span>
+<span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a>  <span class="co"># geom_segment(</span></span>
+<span id="cb10-72"><a href="#cb10-72" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   aes(</span></span>
+<span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     x = reorder(itemcat, sum_est_param),</span></span>
+<span id="cb10-74"><a href="#cb10-74" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     xend = reorder(itemcat, sum_est_param),</span></span>
+<span id="cb10-75"><a href="#cb10-75" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     y = 0, yend = max_r</span></span>
+<span id="cb10-76"><a href="#cb10-76" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   ),</span></span>
+<span id="cb10-77"><a href="#cb10-77" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   linetype = "dashed", color = "gray30", linewidth = 0.2</span></span>
+<span id="cb10-78"><a href="#cb10-78" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ) +</span></span>
+<span id="cb10-79"><a href="#cb10-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-80"><a href="#cb10-80" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_polar</span>() <span class="sc">+</span></span>
+<span id="cb10-81"><a href="#cb10-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>, <span class="at">fill =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb10-82"><a href="#cb10-82" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">11</span>) <span class="sc">+</span></span>
+<span id="cb10-83"><a href="#cb10-83" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb10-84"><a href="#cb10-84" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb10-85"><a href="#cb10-85" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb10-86"><a href="#cb10-86" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb10-87"><a href="#cb10-87" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"none"</span>   <span class="co"># remove legend</span></span>
+<span id="cb10-88"><a href="#cb10-88" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb10-89"><a href="#cb10-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-90"><a href="#cb10-90" aria-hidden="true" tabindex="-1"></a>lt3 <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Moderate restrictions"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02abis_models_lca_2013_2024_files/figure-html/radar%20plot%20for%20LCA3-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Latent class 3</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>lca4_plot_df <span class="ot">&lt;-</span> <span class="fu">subset</span>(probabilities2, LatentClass_recoded<span class="sc">==</span><span class="dv">4</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>plot_df <span class="ot">&lt;-</span> lca4_plot_df <span class="sc">|&gt;</span> </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">itemcat =</span> <span class="fu">factor</span>(itemcat)) <span class="sc">|&gt;</span> </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(itemcat) <span class="sc">|&gt;</span> </span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sum_est_param =</span> <span class="fu">sum</span>(est, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span>   <span class="co"># for ordering</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co">#plot_df &lt;- plot_df %&gt;%</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co">#  mutate(itemcat_lab = recode(itemcat, !!!label_map))</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>plot_df <span class="ot">&lt;-</span> plot_df <span class="sc">%&gt;%</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">itemcat_lab =</span> dplyr<span class="sc">::</span><span class="fu">recode</span>(itemcat, <span class="sc">!!!</span>label_map),</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">itemcat_lab =</span> <span class="fu">factor</span>(</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>      itemcat_lab,</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Local opt - Ctrl"</span>,</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Local opt - Both"</span>,</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>        <span class="st">"THC lim"</span>,</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Rtl - Off"</span>,</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Rtl - Off+On"</span>,</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Public use - Proh"</span>,</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Public use - Restr"</span>,</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Delivery - Restr"</span>,</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Delivery - Proh"</span>,</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Tax - Sales"</span>,</span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Tax - Weight"</span>,</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Tax - S+W"</span>,</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Tax - Potency"</span>,</span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Pricing - Ctrl"</span>,</span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Pack/warn - Req"</span>,</span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Mkt - P/C"</span>,</span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Mkt - Both"</span>,</span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Driving - None"</span>,</span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Driving - No THC"</span>,</span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Driving - THC lim"</span>,</span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Open cont - No law"</span>,</span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Open cont - Proh"</span></span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a>max_r <span class="ot">&lt;-</span> <span class="fu">max</span>(plot_df<span class="sc">$</span>est, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>max_r <span class="ot">&lt;-</span> <span class="fu">ceiling</span>(max_r <span class="sc">*</span> <span class="fl">1.1</span> <span class="sc">*</span> <span class="dv">10</span>) <span class="sc">/</span> <span class="dv">10</span>               <span class="co"># pad &amp; round to 0.1s</span></span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a>grid_breaks <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, max_r, <span class="at">length.out =</span> <span class="dv">4</span>)  </span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a>lt4 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(plot_df) <span class="sc">+</span></span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a>  <span class="co"># custom radial gridlines</span></span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(</span>
+<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">yintercept =</span> y),</span>
+<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(plot_df<span class="sc">$</span>est, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">length.out =</span> <span class="dv">4</span>)),</span>
+<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"lightgrey"</span>, <span class="at">linewidth =</span> <span class="fl">0.3</span></span>
+<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a>  <span class="co"># bars: est by itemcat for each param</span></span>
+<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(</span>
+<span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> <span class="fu">str_wrap</span>(itemcat_lab, <span class="dv">6</span>),</span>
+<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> est,</span>
+<span id="cb11-63"><a href="#cb11-63" aria-hidden="true" tabindex="-1"></a>      <span class="at">fill =</span> itemcat</span>
+<span id="cb11-64"><a href="#cb11-64" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb11-65"><a href="#cb11-65" aria-hidden="true" tabindex="-1"></a>    <span class="at">position =</span> <span class="fu">position_dodge2</span>(<span class="at">width =</span> <span class="fl">0.9</span>, <span class="at">preserve =</span> <span class="st">"single"</span>),</span>
+<span id="cb11-66"><a href="#cb11-66" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.9</span>,</span>
+<span id="cb11-67"><a href="#cb11-67" aria-hidden="true" tabindex="-1"></a>    <span class="at">width =</span> <span class="fl">0.85</span></span>
+<span id="cb11-68"><a href="#cb11-68" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb11-69"><a href="#cb11-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-70"><a href="#cb11-70" aria-hidden="true" tabindex="-1"></a>  <span class="co"># optional: a faint radial guide per param (turn on if you like)</span></span>
+<span id="cb11-71"><a href="#cb11-71" aria-hidden="true" tabindex="-1"></a>  <span class="co"># geom_segment(</span></span>
+<span id="cb11-72"><a href="#cb11-72" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   aes(</span></span>
+<span id="cb11-73"><a href="#cb11-73" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     x = reorder(itemcat, sum_est_param),</span></span>
+<span id="cb11-74"><a href="#cb11-74" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     xend = reorder(itemcat, sum_est_param),</span></span>
+<span id="cb11-75"><a href="#cb11-75" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     y = 0, yend = max_r</span></span>
+<span id="cb11-76"><a href="#cb11-76" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   ),</span></span>
+<span id="cb11-77"><a href="#cb11-77" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   linetype = "dashed", color = "gray30", linewidth = 0.2</span></span>
+<span id="cb11-78"><a href="#cb11-78" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ) +</span></span>
+<span id="cb11-79"><a href="#cb11-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-80"><a href="#cb11-80" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_polar</span>() <span class="sc">+</span></span>
+<span id="cb11-81"><a href="#cb11-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>, <span class="at">fill =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb11-82"><a href="#cb11-82" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">11</span>) <span class="sc">+</span></span>
+<span id="cb11-83"><a href="#cb11-83" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb11-84"><a href="#cb11-84" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb11-85"><a href="#cb11-85" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb11-86"><a href="#cb11-86" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb11-87"><a href="#cb11-87" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"none"</span>   <span class="co"># remove legend</span></span>
+<span id="cb11-88"><a href="#cb11-88" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb11-89"><a href="#cb11-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-90"><a href="#cb11-90" aria-hidden="true" tabindex="-1"></a>lt4 <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"High Restrictions"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02abis_models_lca_2013_2024_files/figure-html/radar%20plot%20for%20LCA4-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+</section>
+</section>
+<section id="supplement-material" class="level1">
+<h1>Supplement material</h1>
+<section id="multilevel-results" class="level2">
+<h2 class="anchored" data-anchor-id="multilevel-results">Multilevel results</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div id="uzumlteaan" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#uzumlteaan table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#uzumlteaan thead, #uzumlteaan tbody, #uzumlteaan tfoot, #uzumlteaan tr, #uzumlteaan td, #uzumlteaan th {
+  border-style: none;
+}
+
+#uzumlteaan p {
+  margin: 0;
+  padding: 0;
+}
+
+#uzumlteaan .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#uzumlteaan .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#uzumlteaan .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#uzumlteaan .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#uzumlteaan .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#uzumlteaan .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#uzumlteaan .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#uzumlteaan .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#uzumlteaan .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#uzumlteaan .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#uzumlteaan .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#uzumlteaan .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#uzumlteaan .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#uzumlteaan .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#uzumlteaan .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#uzumlteaan .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#uzumlteaan .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#uzumlteaan .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#uzumlteaan .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#uzumlteaan .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#uzumlteaan .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#uzumlteaan .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#uzumlteaan .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#uzumlteaan .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#uzumlteaan .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#uzumlteaan .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#uzumlteaan .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#uzumlteaan .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#uzumlteaan .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#uzumlteaan .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#uzumlteaan .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#uzumlteaan .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#uzumlteaan .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#uzumlteaan .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#uzumlteaan .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#uzumlteaan .gt_left {
+  text-align: left;
+}
+
+#uzumlteaan .gt_center {
+  text-align: center;
+}
+
+#uzumlteaan .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#uzumlteaan .gt_font_normal {
+  font-weight: normal;
+}
+
+#uzumlteaan .gt_font_bold {
+  font-weight: bold;
+}
+
+#uzumlteaan .gt_font_italic {
+  font-style: italic;
+}
+
+#uzumlteaan .gt_super {
+  font-size: 65%;
+}
+
+#uzumlteaan .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#uzumlteaan .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#uzumlteaan .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#uzumlteaan .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#uzumlteaan .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#uzumlteaan .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#uzumlteaan .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#uzumlteaan .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#uzumlteaan div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<th colspan="10" class="gt_heading gt_title gt_font_normal"><b>Model Fit Summary Table: All States 2013 - 2024</b><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
+</tr>
+<tr class="gt_heading even">
+<th colspan="10" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">Multilevel model<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
+</tr>
+<tr class="gt_col_headings header">
+<th id="Title" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Classes</th>
+<th id="Parameters" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Par</th>
+<th id="LL" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><em>LL</em></th>
+<th id="BIC" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">BIC</th>
+<th id="aBIC" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">aBIC</th>
+<th id="CAIC" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">CAIC</th>
+<th id="AWE" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">AWE</th>
+<th id="T11_VLMR_PValue" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">VLMR</th>
+<th id="BF" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">BF</th>
+<th id="cmPk" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">cmPk</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="Title">Class 2 Multilevel LCA</td>
+<td class="gt_row gt_right" headers="Parameters">46</td>
+<td class="gt_row gt_right" headers="LL">−1,382</td>
+<td class="gt_row gt_right" headers="BIC">3,059</td>
+<td class="gt_row gt_right" headers="aBIC">2,913</td>
+<td class="gt_row gt_right" headers="CAIC">3,105</td>
+<td class="gt_row gt_right" headers="AWE">3,492</td>
+<td class="gt_row gt_right" headers="T11_VLMR_PValue">0.00</td>
+<td class="gt_row gt_right" headers="BF">&lt;.001</td>
+<td class="gt_row gt_right" headers="cmPk">–</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Title">Class 3 Multilevel LCA</td>
+<td class="gt_row gt_right" headers="Parameters">70</td>
+<td class="gt_row gt_right" headers="LL">−1,200</td>
+<td class="gt_row gt_right" headers="BIC">2,849</td>
+<td class="gt_row gt_right" headers="aBIC">2,626</td>
+<td class="gt_row gt_right" headers="CAIC">2,919</td>
+<td class="gt_row gt_right" headers="AWE">3,508</td>
+<td class="gt_row gt_right" headers="T11_VLMR_PValue">1.00</td>
+<td class="gt_row gt_right" headers="BF">&lt;.001</td>
+<td class="gt_row gt_right" headers="cmPk">–</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Title">Class 4 Multilevel LCA</td>
+<td class="gt_row gt_right" headers="Parameters">94</td>
+<td class="gt_row gt_right" headers="LL">−1,075</td>
+<td class="gt_row gt_right" headers="BIC">2,752</td>
+<td class="gt_row gt_right" headers="aBIC">2,454</td>
+<td class="gt_row gt_right" headers="CAIC">2,846</td>
+<td class="gt_row gt_right" headers="AWE">3,638</td>
+<td class="gt_row gt_right" headers="T11_VLMR_PValue">0.68</td>
+<td class="gt_row gt_right" headers="BF">–</td>
+<td class="gt_row gt_right" headers="cmPk">–</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Title">Class 5 Multilevel LCA</td>
+<td class="gt_row gt_right" headers="Parameters">–</td>
+<td class="gt_row gt_right" headers="LL">–</td>
+<td class="gt_row gt_right" headers="BIC">–</td>
+<td class="gt_row gt_right" headers="aBIC">–</td>
+<td class="gt_row gt_right" headers="CAIC">–</td>
+<td class="gt_row gt_right" headers="AWE">–</td>
+<td class="gt_row gt_right" headers="T11_VLMR_PValue">–</td>
+<td class="gt_row gt_right" headers="BF">–</td>
+<td class="gt_row gt_right" headers="cmPk">–</td>
+</tr>
+</tbody><tfoot class="gt_footnotes">
+<tr class="odd">
+<td colspan="10" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> <em>Note.</em> Par = parameters; <em>LL</em> = log likelihood; BIC = bayesian information criterion; aBIC = sample size adjusted BIC; CAIC = consistent Akaike information criterion; AWE = approximate weight of evidence criterion; VLMR = Vuong-Lo-Mendell-Rubin adjusted likelihood ratio test p-value.</td>
+</tr>
+</tfoot>
+
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>   
+      0   1   2   3
+  1 481   0   0   0
+  2   0   0   0  62
+  3   0  28   0   0
+  4   0   0  41   0</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02abis_models_lca_2013_2024_files/figure-html/LCA%20multilevel%20models%20plot%20recoded-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#library(grid)</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 1) a dummy point inside the panel so ggplot can draw a legend key for "RCL start"</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>dummy_pt <span class="ot">&lt;-</span> <span class="fu">with</span>(lca4_ml, <span class="fu">data.frame</span>(</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">year   =</span> <span class="fu">as.factor</span>(<span class="fu">sort</span>(<span class="fu">unique</span>(year))[<span class="dv">1</span>]),</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">stabbr =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(stabbr))[<span class="dv">1</span>]</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>lca4_ml_gp <span class="ot">&lt;-</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(lca4_ml, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.factor</span>(year), <span class="at">y =</span> stabbr,</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>                      <span class="at">fill =</span> <span class="fu">as.factor</span>(lawtype_ml))) <span class="sc">+</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">color =</span> <span class="st">"gray100"</span>) <span class="sc">+</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># draw the rectangle outline in the plot, but NO legend from this layer</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> rmlyear,</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.factor</span>(year), <span class="at">y =</span> stabbr),</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">linewidth =</span> <span class="fl">0.25</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="cn">NA</span>,</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>, <span class="at">show.legend =</span> <span class="cn">FALSE</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># actual sales start squares (will provide one legend entry)</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> rmlslyear,</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.factor</span>(year), <span class="at">y =</span> stabbr, <span class="at">shape =</span> <span class="st">"Sales start"</span>),</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">1.2</span>, <span class="at">inherit.aes =</span> <span class="cn">FALSE</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># legend-only entry for RCL start (invisible on plot, but appears in legend)</span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> dummy_pt,</span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> stabbr, <span class="at">shape =</span> <span class="st">"RCL start"</span>),</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">0</span>, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">inherit.aes =</span> <span class="cn">FALSE</span></span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_discrete</span>(<span class="at">limits =</span> rev) <span class="sc">+</span></span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> cols,</span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>                    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Class 1"</span>,<span class="st">"Class 2"</span>,<span class="st">"Class 3"</span>,<span class="st">"Class 4"</span>),</span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>                    <span class="at">name   =</span> <span class="st">"Latent Class"</span>) <span class="sc">+</span></span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ONE combined legend block for both markers</span></span>
+<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_shape_manual</span>(</span>
+<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">name   =</span> <span class="st">""</span>,</span>
+<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">"RCL start"</span>,<span class="st">"Sales start"</span>),</span>
+<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"RCL start"</span> <span class="ot">=</span> <span class="dv">0</span>,  <span class="co"># open square = law enacted</span></span>
+<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a>               <span class="st">"Sales start"</span> <span class="ot">=</span> <span class="dv">15</span>),  <span class="co"># filled square = sales start</span></span>
+<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"RCL start"</span>  <span class="ot">=</span> <span class="st">"RCL starts"</span>,</span>
+<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a>               <span class="st">"Sales start"</span> <span class="ot">=</span> <span class="st">"RCL sales start"</span>)</span>
+<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(</span>
+<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill  =</span> <span class="fu">guide_legend</span>(<span class="at">order =</span> <span class="dv">1</span>,</span>
+<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a>                         <span class="at">byrow =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>                         <span class="at">keyheight =</span> <span class="fu">unit</span>(<span class="dv">10</span>, <span class="st">"pt"</span>)),</span>
+<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">shape =</span> <span class="fu">guide_legend</span>(<span class="at">order =</span> <span class="dv">2</span>,</span>
+<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a>                         <span class="at">byrow =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a>                         <span class="at">override.aes =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">alpha =</span> <span class="dv">1</span>),</span>
+<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a>                         <span class="at">keyheight =</span> <span class="fu">unit</span>(<span class="dv">11</span>, <span class="st">"pt"</span>))</span>
+<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb13-60"><a href="#cb13-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb13-61"><a href="#cb13-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.spacing.y  =</span> <span class="fu">unit</span>(<span class="dv">3</span>, <span class="st">"pt"</span>),       <span class="co"># no extra gap between rows</span></span>
+<span id="cb13-62"><a href="#cb13-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.key.height =</span> <span class="fu">unit</span>(<span class="dv">10</span>, <span class="st">"pt"</span>),</span>
+<span id="cb13-63"><a href="#cb13-63" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.box.spacing =</span> <span class="fu">unit</span>(<span class="dv">4</span>, <span class="st">"pt"</span>)</span>
+<span id="cb13-64"><a href="#cb13-64" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb13-65"><a href="#cb13-65" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Year"</span>, <span class="at">y =</span> <span class="st">"State"</span>,</span>
+<span id="cb13-66"><a href="#cb13-66" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Multilevel LCA all states-years 2013–2024"</span>)</span>
+<span id="cb13-67"><a href="#cb13-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-68"><a href="#cb13-68" aria-hidden="true" tabindex="-1"></a>lca4_ml_gp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02abis_models_lca_2013_2024_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Recoded</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">#lca4_ml$lawtype_ml[lca4_ml$C == 1] &lt;- 0 #States that havent legalized</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">#lca4_ml$lawtype_ml[lca4_ml$C == 3] &lt;- 1 #Early legalization</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">#lca4_ml$lawtype_ml[lca4_ml$C == 4] &lt;- 2 #More regulated than 1</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">#lca4_ml$lawtype_ml[lca4_ml$C == 2] &lt;- 3 #More regulated than 2</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>probabilities_ml <span class="ot">&lt;-</span> lca_main_multilevel<span class="sc">$</span>c4_lca_multilevel.out<span class="sc">$</span>parameters<span class="sc">$</span>probability.scale</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>probabilities_ml<span class="sc">$</span>LatentClass_recoded[probabilities_ml<span class="sc">$</span>LatentClass  <span class="sc">==</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="co">#States that havent legalized</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>probabilities_ml<span class="sc">$</span>LatentClass_recoded[probabilities_ml<span class="sc">$</span>LatentClass  <span class="sc">==</span> <span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="co">#More regulated than 2</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>probabilities_ml<span class="sc">$</span>LatentClass_recoded[probabilities_ml<span class="sc">$</span>LatentClass  <span class="sc">==</span> <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="co">#Early legalization</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>probabilities_ml<span class="sc">$</span>LatentClass_recoded[probabilities_ml<span class="sc">$</span>LatentClass  <span class="sc">==</span> <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="dv">4</span> <span class="co">#More regulated than 3</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>probabilities_ml <span class="ot">&lt;-</span> probabilities_ml <span class="sc">|&gt;</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(param, category, est, LatentClass_recoded) <span class="sc">|&gt;</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> LatentClass_recoded,</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> est,</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_prefix =</span> <span class="st">"Class"</span>)</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(probabilities_ml, <span class="at">n =</span> <span class="dv">52</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 33 × 6
+   param  category Class1 Class4 Class2 Class3
+   &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+ 1 LCAUTH 1             1  0.177  0.643  0    
+ 2 LCAUTH 2             0  0.065  0.036  0.268
+ 3 LCAUTH 3             0  0.758  0.321  0.732
+ 4 ADGN   1             1  0      0.928  0.098
+ 5 ADGN   2             0  0.097  0.072  0.146
+ 6 ADGN   3             0  0.903  0      0.756
+ 7 PKWRN  1             1  0.016  0.927  0.196
+ 8 PKWRN  2             0  0.984  0.073  0.804
+ 9 PRCNG  1             1  0.113  0.929  0.415
+10 PRCNG  2             0  0.887  0.071  0.585
+11 HMDL   1             1  0      0.857  0.024
+12 HMDL   2             0  0.419  0.036  0.756
+13 HMDL   3             0  0.581  0.107  0.22 
+14 THCLIM 1             1  0.178  1      0.317
+15 THCLIM 2             0  0.822  0      0.683
+16 RTL    1             1  0      0.464  0    
+17 RTL    2             0  1      0.536  0.073
+18 RTL    3             0  0      0      0.927
+19 PBLUS  1             1  0      0.107  0.073
+20 PBLUS  2             0  0      0      0.927
+21 PBLUS  3             0  1      0.893  0    
+22 TAX2   1             1  0      0.572  0    
+23 TAX2   2             0  0.677  0.393  0.732
+24 TAX2   3             0  0      0.036  0.195
+25 TAX2   4             0  0.194  0      0    
+26 TAX2   5             0  0.129  0      0.073
+27 DRVPR2 1             1  0      0      0    
+28 DRVPR2 2             0  0.21   0.286  0.195
+29 DRVPR2 3             0  0.323  0.571  0.683
+30 DRVPR2 4             0  0.468  0.143  0.122
+31 OPNCN  1             1  0      0      0    
+32 OPNCN  2             0  0.484  0.821  0.78 
+33 OPNCN  3             0  0.516  0.179  0.22 </code></pre>
+</div>
+</div>
+</section>
+<section id="results-without-dc" class="level2">
+<h2 class="anchored" data-anchor-id="results-without-dc">Results without DC</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 33 × 6
+   param  category `Class 1` `Class 2` `Class 3` `Class 4`
+   &lt;chr&gt;  &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+ 1 LCAUTH 1                1     0.31      0         0.2  
+ 2 LCAUTH 2                0     0.034     0.289     0.073
+ 3 LCAUTH 3                0     0.655     0.711     0.727
+ 4 ADGN   1                1     0.586     0.105     0    
+ 5 ADGN   2                0     0.31      0.132     0    
+ 6 ADGN   3                0     0.104     0.763     1    
+ 7 PKWRN  1                1     0.621     0.211     0    
+ 8 PKWRN  2                0     0.379     0.789     1    
+ 9 PRCNG  1                1     0.931     0.368     0    
+10 PRCNG  2                0     0.069     0.632     1    
+11 HMDL   1                1     0.517     0.026     0    
+12 HMDL   2                0     0.138     0.737     0.473
+13 HMDL   3                0     0.345     0.237     0.527
+14 THCLIM 1                1     0.793     0.263     0.182
+15 THCLIM 2                0     0.207     0.737     0.818
+16 RTL    1                1     0.138     0         0    
+17 RTL    2                0     0.862     0         1    
+18 RTL    3                0     0         1         0    
+19 PBLUS  1                1     0.207     0         0    
+20 PBLUS  2                0     0         1         0    
+21 PBLUS  3                0     0.793     0         1    
+22 TAX2   1                1     0.241     0         0    
+23 TAX2   2                0     0.724     0.711     0.636
+24 TAX2   3                0     0.034     0.211     0    
+25 TAX2   4                0     0         0         0.218
+26 TAX2   5                0     0         0.079     0.145
+27 DRVPR2 1                1     0         0         0    
+28 DRVPR2 2                0     0.414     0.184     0.182
+29 DRVPR2 3                0     0.448     0.684     0.291
+30 DRVPR2 4                0     0.138     0.132     0.527
+31 OPNCN  1                1     0         0         0    
+32 OPNCN  2                0     0.69      0.763     0.491
+33 OPNCN  3                0     0.31      0.237     0.509</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   
+      0   1   2   3
+  1 481   0   0   0
+  2   0   0   0  62
+  3   0  28   0   0
+  4   0   0  41   0</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02abis_models_lca_2013_2024_files/figure-html/LCA%20multilevel%20without%20DC%20models%20plot-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="results-2020-2024" class="level2">
+<h2 class="anchored" data-anchor-id="results-2020-2024">Results 2020-2024</h2>
+<section id="standard" class="level3">
+<h3 class="anchored" data-anchor-id="standard">Standard</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02abis_models_lca_2013_2024_files/figure-html/LCA%20standard%20models%20plot%202020%202024-1.png" class="img-fluid figure-img" width="480"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="multilevel" class="level3">
+<h3 class="anchored" data-anchor-id="multilevel">Multilevel</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02abis_models_lca_2013_2024_files/figure-html/LCA%20multilevel%20models%20plot%202020%202024-1.png" class="img-fluid figure-img" width="480"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="results-in-rcl-states" class="level2">
+<h2 class="anchored" data-anchor-id="results-in-rcl-states">Results in RCL states</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>results_rcl_all <span class="ot">&lt;-</span>  <span class="fu">readModels</span>(<span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"rcl"</span>), <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>No PROPORTION OF DATA PRESENT sections found within COVARIANCE COVERAGE OF DATA output.
+No PROPORTION OF DATA PRESENT sections found within COVARIANCE COVERAGE OF DATA output.
+No PROPORTION OF DATA PRESENT sections found within COVARIANCE COVERAGE OF DATA output.
+No PROPORTION OF DATA PRESENT sections found within COVARIANCE COVERAGE OF DATA output.
+No PROPORTION OF DATA PRESENT sections found within COVARIANCE COVERAGE OF DATA output.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>results_RCL <span class="ot">&lt;-</span> results_rcl_all<span class="sc">$</span>c4_lca_rcl.out<span class="sc">$</span>savedata</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>results_RCL <span class="ot">&lt;-</span>  state <span class="sc">|&gt;</span> <span class="fu">inner_join</span>(results_RCL,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                                             <span class="at">by =</span> <span class="st">'ID'</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>results_RCL<span class="sc">$</span>C_recoded[results_RCL<span class="sc">$</span>C <span class="sc">==</span> <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co">#States without RML</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>results_RCL<span class="sc">$</span>C_recoded[results_RCL<span class="sc">$</span>C <span class="sc">==</span> <span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="co">#Early legalization</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>results_RCL<span class="sc">$</span>C_recoded[results_RCL<span class="sc">$</span>C <span class="sc">==</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="co">#More regulated than 1</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>results_RCL<span class="sc">$</span>C_recoded[results_RCL<span class="sc">$</span>C <span class="sc">==</span> <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="co">#More regulated than 2</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"0"</span> <span class="ot">=</span> <span class="st">"#dddddd"</span>,</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>          <span class="st">"1"</span> <span class="ot">=</span> <span class="st">"#FFB000"</span>,</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>          <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"#19c691"</span>,</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>          <span class="st">"3"</span> <span class="ot">=</span> <span class="st">"#ba91ff"</span>)</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>lca4_rcl_gp <span class="ot">&lt;-</span> </span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(results_RCL, </span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>         <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.factor</span>(year),</span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>                       <span class="at">y =</span> stabbr,</span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>                       <span class="at">fill =</span> <span class="fu">as.factor</span>(C_recoded)</span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>         )</span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">color =</span> <span class="st">"gray100"</span>) <span class="sc">+</span></span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_discrete</span>(<span class="at">limits =</span> rev) <span class="sc">+</span></span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> cols,</span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>                    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Class 1"</span>, <span class="st">"Class 2"</span>, <span class="st">"Class 3"</span>, <span class="st">"Class 4"</span>)) <span class="sc">+</span></span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># scale_shape_manual(</span></span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Year"</span>,</span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"State"</span>,</span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Latent Class"</span>,</span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Standard LCA in RCL states 2013-2024"</span>)</span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a>lca4_rcl_gp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02abis_models_lca_2013_2024_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="results-by-year" class="level2">
+<h2 class="anchored" data-anchor-id="results-by-year">Results by year</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>results_yr <span class="ot">&lt;-</span>  <span class="fu">readModels</span>(<span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"yr"</span>), <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>No PROPORTION OF DATA PRESENT sections found within COVARIANCE COVERAGE OF DATA output.
+No PROPORTION OF DATA PRESENT sections found within COVARIANCE COVERAGE OF DATA output.
+No PROPORTION OF DATA PRESENT sections found within COVARIANCE COVERAGE OF DATA output.
+No PROPORTION OF DATA PRESENT sections found within COVARIANCE COVERAGE OF DATA output.
+No PROPORTION OF DATA PRESENT sections found within COVARIANCE COVERAGE OF DATA output.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>results_yr_2020 <span class="ot">&lt;-</span> results_yr<span class="sc">$</span>c4_lca_2020.out<span class="sc">$</span>savedata</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>results_yr_2020<span class="sc">$</span>year</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NULL</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Recoded</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>results_yr_2021 <span class="ot">&lt;-</span> results_yr<span class="sc">$</span>c4_lca_2021.out<span class="sc">$</span>savedata</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>results_yr_2022 <span class="ot">&lt;-</span> results_yr<span class="sc">$</span>c4_lca_2022.out<span class="sc">$</span>savedata</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>results_yr_2023 <span class="ot">&lt;-</span> results_yr<span class="sc">$</span>c4_lca_2023.out<span class="sc">$</span>savedata</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>results_yr_2024 <span class="ot">&lt;-</span> results_yr<span class="sc">$</span>c4_lca_2024.out<span class="sc">$</span>savedata</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>results_yr_2024<span class="sc">$</span>C_recoded[results_yr_2024<span class="sc">$</span>C <span class="sc">==</span> <span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co">#States without RML</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>results_yr_2024<span class="sc">$</span>C_recoded[results_yr_2024<span class="sc">$</span>C <span class="sc">==</span> <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="co">#Early legalization</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>results_yr_2024<span class="sc">$</span>C_recoded[results_yr_2024<span class="sc">$</span>C <span class="sc">==</span> <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="co">#More regulated than 1</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>results_yr_2024<span class="sc">$</span>C_recoded[results_yr_2024<span class="sc">$</span>C <span class="sc">==</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="co">#More regulated than 2</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>results_yr_2023<span class="sc">$</span>C_recoded[results_yr_2023<span class="sc">$</span>C <span class="sc">==</span> <span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co">#States without RML</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>results_yr_2023<span class="sc">$</span>C_recoded[results_yr_2023<span class="sc">$</span>C <span class="sc">==</span> <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="co">#Early legalization</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>results_yr_2023<span class="sc">$</span>C_recoded[results_yr_2023<span class="sc">$</span>C <span class="sc">==</span> <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="co">#More regulated than 1</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>results_yr_2023<span class="sc">$</span>C_recoded[results_yr_2023<span class="sc">$</span>C <span class="sc">==</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="co">#More regulated than 2</span></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>results_yr_2022<span class="sc">$</span>C_recoded[results_yr_2022<span class="sc">$</span>C <span class="sc">==</span> <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co">#States without RML</span></span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>results_yr_2022<span class="sc">$</span>C_recoded[results_yr_2022<span class="sc">$</span>C <span class="sc">==</span> <span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="co">#Early legalization</span></span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>results_yr_2022<span class="sc">$</span>C_recoded[results_yr_2022<span class="sc">$</span>C <span class="sc">==</span> <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="co">#More regulated than 1</span></span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>results_yr_2022<span class="sc">$</span>C_recoded[results_yr_2022<span class="sc">$</span>C <span class="sc">==</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="co">#More regulated than 2</span></span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>results_yr_2021<span class="sc">$</span>C_recoded[results_yr_2021<span class="sc">$</span>C <span class="sc">==</span> <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co">#States without RML</span></span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>results_yr_2021<span class="sc">$</span>C_recoded[results_yr_2021<span class="sc">$</span>C <span class="sc">==</span> <span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="co">#Early legalization</span></span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>results_yr_2021<span class="sc">$</span>C_recoded[results_yr_2021<span class="sc">$</span>C <span class="sc">==</span> <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="co">#More regulated than 1</span></span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>results_yr_2021<span class="sc">$</span>C_recoded[results_yr_2021<span class="sc">$</span>C <span class="sc">==</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="co">#More regulated than 2</span></span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>results_yr_2020<span class="sc">$</span>C_recoded[results_yr_2020<span class="sc">$</span>C <span class="sc">==</span> <span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co">#States without RML</span></span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>results_yr_2020<span class="sc">$</span>C_recoded[results_yr_2020<span class="sc">$</span>C <span class="sc">==</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="co">#Early legalization</span></span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>results_yr_2020<span class="sc">$</span>C_recoded[results_yr_2020<span class="sc">$</span>C <span class="sc">==</span> <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="co">#More regulated than 1</span></span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>results_yr_2020<span class="sc">$</span>C_recoded[results_yr_2020<span class="sc">$</span>C <span class="sc">==</span> <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="co">#More regulated than 2</span></span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>results_yr_2020_2024 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(results_yr_2020, results_yr_2021, results_yr_2022,</span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>                              results_yr_2023, results_yr_2024)</span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>results_yr_2020_2024 <span class="ot">&lt;-</span>  state <span class="sc">|&gt;</span> <span class="fu">inner_join</span>(results_yr_2020_2024,</span>
+<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>                                <span class="at">by =</span> <span class="st">'ID'</span>)</span>
+<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a>cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"0"</span> <span class="ot">=</span> <span class="st">"#dddddd"</span>,</span>
+<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a>          <span class="st">"1"</span> <span class="ot">=</span> <span class="st">"#FFB000"</span>,</span>
+<span id="cb25-43"><a href="#cb25-43" aria-hidden="true" tabindex="-1"></a>          <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"#19c691"</span>,</span>
+<span id="cb25-44"><a href="#cb25-44" aria-hidden="true" tabindex="-1"></a>          <span class="st">"3"</span> <span class="ot">=</span> <span class="st">"#ba91ff"</span>)</span>
+<span id="cb25-45"><a href="#cb25-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-46"><a href="#cb25-46" aria-hidden="true" tabindex="-1"></a><span class="co">#results_yr_2020$C_recoded &lt;- as.factor(results_yr_2020$C_recoded)</span></span>
+<span id="cb25-47"><a href="#cb25-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-48"><a href="#cb25-48" aria-hidden="true" tabindex="-1"></a>lca_yr_2020_2024_gp <span class="ot">&lt;-</span> </span>
+<span id="cb25-49"><a href="#cb25-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(results_yr_2020_2024, </span>
+<span id="cb25-50"><a href="#cb25-50" aria-hidden="true" tabindex="-1"></a>         <span class="at">mapping =</span>  <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.factor</span>(year),</span>
+<span id="cb25-51"><a href="#cb25-51" aria-hidden="true" tabindex="-1"></a>                       <span class="at">y =</span> stabbr,</span>
+<span id="cb25-52"><a href="#cb25-52" aria-hidden="true" tabindex="-1"></a>                       <span class="at">fill =</span> <span class="fu">as.factor</span>(C_recoded)</span>
+<span id="cb25-53"><a href="#cb25-53" aria-hidden="true" tabindex="-1"></a>         )</span>
+<span id="cb25-54"><a href="#cb25-54" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb25-55"><a href="#cb25-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">color =</span> <span class="st">"gray100"</span>) <span class="sc">+</span></span>
+<span id="cb25-56"><a href="#cb25-56" aria-hidden="true" tabindex="-1"></a>  <span class="co"># geom_tile(</span></span>
+<span id="cb25-57"><a href="#cb25-57" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   data = rmlyear,</span></span>
+<span id="cb25-58"><a href="#cb25-58" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   mapping = aes(x = as.factor(year), y = stabbr,</span></span>
+<span id="cb25-59"><a href="#cb25-59" aria-hidden="true" tabindex="-1"></a>  <span class="co">#                 linetype = "RCL start"),</span></span>
+<span id="cb25-60"><a href="#cb25-60" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   #shape = 15,</span></span>
+<span id="cb25-61"><a href="#cb25-61" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   linewidth = 0.25,</span></span>
+<span id="cb25-62"><a href="#cb25-62" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   color = "black",</span></span>
+<span id="cb25-63"><a href="#cb25-63" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   fill = NA,</span></span>
+<span id="cb25-64"><a href="#cb25-64" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   inherit.aes = FALSE</span></span>
+<span id="cb25-65"><a href="#cb25-65" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ) +</span></span>
+<span id="cb25-66"><a href="#cb25-66" aria-hidden="true" tabindex="-1"></a>  <span class="co"># geom_point(</span></span>
+<span id="cb25-67"><a href="#cb25-67" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   data = rmlslyear,</span></span>
+<span id="cb25-68"><a href="#cb25-68" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   mapping =  aes(x = as.factor(year), y = stabbr,</span></span>
+<span id="cb25-69"><a href="#cb25-69" aria-hidden="true" tabindex="-1"></a>  <span class="co">#                  shape = "RCL sales start"),</span></span>
+<span id="cb25-70"><a href="#cb25-70" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   shape = 15,</span></span>
+<span id="cb25-71"><a href="#cb25-71" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   size = 1,</span></span>
+<span id="cb25-72"><a href="#cb25-72" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   color = "black",</span></span>
+<span id="cb25-73"><a href="#cb25-73" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   #   show.legend = TRUE,</span></span>
+<span id="cb25-74"><a href="#cb25-74" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   inherit.aes = FALSE</span></span>
+<span id="cb25-75"><a href="#cb25-75" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ) +</span></span>
+<span id="cb25-76"><a href="#cb25-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_discrete</span>(<span class="at">limits =</span> rev) <span class="sc">+</span></span>
+<span id="cb25-77"><a href="#cb25-77" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> cols,</span>
+<span id="cb25-78"><a href="#cb25-78" aria-hidden="true" tabindex="-1"></a>                    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Class 1"</span>, <span class="st">"Class 2"</span>, <span class="st">"Class 3"</span>, <span class="st">"Class 4"</span>)) <span class="sc">+</span></span>
+<span id="cb25-79"><a href="#cb25-79" aria-hidden="true" tabindex="-1"></a>  <span class="co"># scale_shape_manual(</span></span>
+<span id="cb25-80"><a href="#cb25-80" aria-hidden="true" tabindex="-1"></a>  <span class="co">#    name = "",</span></span>
+<span id="cb25-81"><a href="#cb25-81" aria-hidden="true" tabindex="-1"></a>  <span class="co">#    values = c("RCL sales start" = 15),   # solid circle</span></span>
+<span id="cb25-82"><a href="#cb25-82" aria-hidden="true" tabindex="-1"></a>  <span class="co">#    labels = c("RCL sales start" = "RCL Sales Start")</span></span>
+<span id="cb25-83"><a href="#cb25-83" aria-hidden="true" tabindex="-1"></a>  <span class="co">#  ) +</span></span>
+<span id="cb25-84"><a href="#cb25-84" aria-hidden="true" tabindex="-1"></a>  <span class="co"># scale_linetype_manual(</span></span>
+<span id="cb25-85"><a href="#cb25-85" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   name = "",</span></span>
+<span id="cb25-86"><a href="#cb25-86" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   values = c("RCL start" = 1),   # solid line (used for rectangle outline)</span></span>
+<span id="cb25-87"><a href="#cb25-87" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   labels = c("RCL start" = "RCL Start")</span></span>
+<span id="cb25-88"><a href="#cb25-88" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ) +</span></span>
+<span id="cb25-89"><a href="#cb25-89" aria-hidden="true" tabindex="-1"></a>  <span class="co"># scale_shape_manual(</span></span>
+<span id="cb25-90"><a href="#cb25-90" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   name = "",</span></span>
+<span id="cb25-91"><a href="#cb25-91" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   values = c("RCL sales start" = 15),   # solid line (used for rectangle outline)</span></span>
+<span id="cb25-92"><a href="#cb25-92" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   labels = c("RCL sales start" = "RCL sales start")</span></span>
+<span id="cb25-93"><a href="#cb25-93" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ) +</span></span>
+<span id="cb25-94"><a href="#cb25-94" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb25-95"><a href="#cb25-95" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Year"</span>,</span>
+<span id="cb25-96"><a href="#cb25-96" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"State"</span>,</span>
+<span id="cb25-97"><a href="#cb25-97" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Latent Class"</span>,</span>
+<span id="cb25-98"><a href="#cb25-98" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Standard LCA all states-years 2020-2024"</span>)</span>
+<span id="cb25-99"><a href="#cb25-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-100"><a href="#cb25-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-101"><a href="#cb25-101" aria-hidden="true" tabindex="-1"></a>lca_yr_2020_2024_gp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02abis_models_lca_2013_2024_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="480"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>plot_df <span class="ot">&lt;-</span> results_yr_2020_2024 <span class="sc">|&gt;</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">year =</span> <span class="fu">factor</span>(year),</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">C_recoded =</span> <span class="fu">factor</span>(C_recoded, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>))  <span class="co"># or as.character if your levels are "1"-"4"</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-ncls2024" class="csl-entry" role="listitem">
+NCLS. 2024. <span>“State Medical Cannabis Laws.”</span> <a href="https://www.ncsl.org/health/state-medical-cannabis-laws#undefined">https://www.ncsl.org/health/state-medical-cannabis-laws#undefined</a>.
+</div>
+<div id="ref-shah2024" class="csl-entry" role="listitem">
+Shah, Athena Chapekis, and Sono. 2024. <span>“Most Americans Now Live in a Legal Marijuana State <span></span> and Most Have at Least One Dispensary in Their County.”</span> <a href="https://www.pewresearch.org/short-reads/2024/02/29/most-americans-now-live-in-a-legal-marijuana-state-and-most-have-at-least-one-dispensary-in-their-county/">https://www.pewresearch.org/short-reads/2024/02/29/most-americans-now-live-in-a-legal-marijuana-state-and-most-have-at-least-one-dispensary-in-their-county/</a>.
+</div>
+</div></section></div></main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
