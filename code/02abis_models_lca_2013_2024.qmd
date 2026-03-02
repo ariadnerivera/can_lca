@@ -1,0 +1,2188 @@
+---
+title: "Mapping the shifts: analysis of recreational cannabis policies from 2013-2024 in US states"
+
+author: "Ariadne Rivera"
+
+format: 
+  html:
+    toc: true
+
+editor: visual
+
+bibliography: references.bib
+---
+
+```{r}
+#| label: load-packages 
+#| echo: false 
+#| warning: false
+
+library(ggcorrplot) 
+library(tidyverse) 
+library(haven) 
+library(Rtsne) 
+library(factoextra) 
+library(corrplot) 
+library(here) 
+library(MplusAutomation) 
+library(ggpubr) 
+library(psych) 
+library(glue) 
+library(gt) 
+library(reshape2) 
+library(cowplot) 
+library(vcd) 
+library(corrr)
+library(stringr)
+library(ggtext)
+library(patchwork)
+library(rcartocolor)
+library(grid)
+library(forcats)
+  
+```
+
+# Background
+
+Over the past two decades, rapid shifts have occurred in the legal landscape of cannabis. Many states have moved from a prohibitionist type of approach to legalization for medical use and towards the subsequent legalization of cannabis legalization for recreational use. As of November 2024, 39 states have permitted the use and commercialization of medical cannabis products, 9 states allowed the use low THC, high CBD products, and 24 states had legalized cannabis for recreational purposes [@ncls2024]. Consequently, approximately 80% of the population in the US resides in a county where they can access medical or adult-use cannabis through a retail outlet [@shah2024].
+
+This quarto file includes the final code to create figures and results from the models presented in the thesis.
+
+```{r}
+#| label: load-dataset
+#| echo: false
+#| warning: false
+
+df <- read.csv(here(
+  "data/3_analytic/cannabis_lca_analytic_2013_2024_updated.csv"
+))
+
+#names(df)
+
+#str(df)
+
+df <- df %>%
+  rename(ID = id)
+
+state <- subset(df, select = c("ID", "styr", "stname", "stabbr", "stfips", "year"))
+state <- state %>% arrange(styr)
+
+```
+
+## Descriptive
+
+### Correlation plots of cannabis characteristics (continuous)
+
+```{r}
+#| label: listofcovs for corrplots
+#| echo: false
+#| warning: false
+
+col_names <- c("rml", "rmlsl", "regag", "lcauth", "edib", "conc",
+               "thclim", "rtl", "pblus", "rmlhc", "hmdl", "estlm", 
+               "tax2", "prcng", "pkr", "warnr", "adgn", "adyth",
+               "undrg2", #"drvpr2", 
+               "drvpr3",  "opncn")
+
+```
+
+##### Correlation of RML chacatersitics among RML states
+
+This figure shows the correlation between recreational cannabis policies characteristics between 2013 to 2024 among RML state-years only.
+
+```{r corrplot, fig.width=8, fig.height=8, out.extra="width=0.9\\linewidth"}
+#| label: corrplot rml states
+#| echo: false 
+#| warning: false
+
+df_rml <- subset(df, rml == 1)
+df_rml <- df_rml[, col_names]
+
+cor_matrix <- model.matrix(~0+., data=df_rml) %>% cor(use="pairwise.complete.obs")
+
+
+
+#col_names <- c("rml", "rmlsl", "regag", "lcauth", "edib", "conc",
+#               "thclim", "rtl", "pblus", "rmlhc", "estlm", 
+#               "tax2", "prcng", "pkr", "warnr", "adgn", "adyth",
+#               "undrg2", "drvpr2",  "opncn")
+
+new_labels <- c(
+  "Recreational Cannabis Legalization", "Recreational Cannabis Sales",
+  "Regulatory Agency", "Local Authority", "Edibles Allowed", 
+  "Concentrates Allowed", "Potency Limits", "Pulic Use Restrictions",
+  "Retail Sales Consumption Restrictions", 
+  "Home Cultivation", "Home Delivery", "Establishment Limits", 
+  "Taxation Scheme", "Pricing Controls", "Packaging Requirements", 
+  "Warning Labels Requirements", "Advertising Restrictions", 
+  "Youth Advertising Restrictions", "Underage Restrictions", 
+  "Driving Prohibitions", "Open Container Laws"
+)
+
+colnames(cor_matrix) <- new_labels
+rownames(cor_matrix) <- new_labels
+
+p_rml <- ggcorrplot(
+  cor_matrix,
+  show.diag = FALSE,
+  type = "lower",
+  lab = TRUE,
+  lab_size = 2,
+  # method = "circle",
+  outline.color = "white"#,
+  # insig = "blank",
+  #title = paste("Correlation Among RML State-Years")
+)
+
+p_rml
+
+```
+
+# Main models
+
+```{r}
+#| echo: false
+#| warning: false
+
+cannabispol <- df[order(df$ID), ] 
+
+
+row.names(cannabispol) <- NULL
+
+
+col_names <- c("rml", "mml", "rmlsl", "regag", "lcauth", "edib", "hemp",  
+               "adgn", "adyth","pkr", "warnr", "pkwrn", "prcng", "hmdl",
+               "thclim", "rtl", "pblus", "mmlhc", "rmlhc", "tax","tax2",
+               "undrg2", "drvpr2",  "drvpr3", "opncn", "opncn2", "estlm")
+
+
+#Change categorical variables to factor variables
+cannabispol[,col_names] <- lapply(cannabispol[, col_names], factor) 
+
+######################################################################
+#Prepare data for Mplus
+
+#All state-years
+cannabispol_subset <- cannabispol[, c("ID", "styr" ,"stabbr", "stfips", "year", col_names)]
+cannabispol_subset <- cannabispol_subset %>% arrange(styr)
+
+names(cannabispol_subset)
+
+
+state <- subset(cannabispol, select = c("ID", "styr", "stname", "stabbr", "stfips", "year"))
+state <- state %>% arrange(styr)
+
+
+
+```
+
+## Pooled latent class analysis
+
+### Standard model
+
+```{r, results='hide'}
+#| label: Run LCA standard model 
+#| echo: false
+#| warning: false
+#| eval: false
+
+
+output_dir <- here("results", "main", "sd")
+if (!dir.exists(output_dir)) {
+  dir.create(output_dir, recursive = TRUE)
+}
+
+
+# Run models 1-5 classes with all variables
+lca_pooled_rml_k1_5 <- lapply(1:5, function(k) {
+  lca_pooled_rml_enum <- mplusObject(
+    TITLE = glue("Class {k} Standard LCA"),
+    
+    VARIABLE = glue(
+      "categorical = lcauth thclim 
+      rtl pblus hmdl tax2 prcng 
+      pkwrn adgn drvpr2 opncn;
+      
+      usevar =  lcauth thclim 
+      rtl pblus hmdl tax2 prcng 
+      pkwrn adgn drvpr2 opncn;
+      
+      classes = c({k});
+      
+      idvariable = id;
+     " 
+    ),
+    
+    ANALYSIS =
+      "type = mixture;
+      starts = 500 100;
+      lrtstarts = 0 0 1000 500;
+      stiteration = 20;",
+    
+    
+    SAVEDATA = glue("file = c{k}_lca_standard.txt;
+      save = cprob;
+      format = free;"),
+    
+    OUTPUT = "tech10 tech11 tech14;",
+    
+    usevariables = colnames(cannabispol_subset),
+    rdata = cannabispol_subset
+  )
+  
+  lca_pooled_rml_enum_fit <- mplusModeler(
+    lca_pooled_rml_enum,
+    dataout = file.path(output_dir, glue("c{k}_lca_standard.dat")),
+    modelout = file.path(output_dir, glue("c{k}_lca_standard.inp")),
+    check = TRUE,
+    run = TRUE,
+    hashfilename = FALSE
+  )
+})
+
+
+
+```
+
+#### Standard model 1-5 class comparison
+
+```{r}
+#| label: LCA standard models
+#| echo: false
+#| warning: false
+
+
+lca_main_standard <-  readModels(here("results", "main", "sd"), quiet = TRUE)
+
+enum_summary_main_standard <-  LatexSummaryTable(
+  lca_main_standard,
+  keepCols = c(
+    "Title",
+    "Parameters",
+    "LL",
+    "BIC",
+    "aBIC",
+    "BLRT_PValue",
+    "T11_VLMR_PValue",
+    "Observations"#,
+    #"Entropy"
+  ),
+  sortBy = "Title"
+)
+
+
+
+allFit_main_standard <- enum_summary_main_standard %>% 
+  mutate(
+    aBIC = -2*LL + Parameters*log((Observations+2)/24),
+    CAIC = -2*LL + Parameters*(log(Observations)+1),
+    AWE = -2*LL + 2*Parameters*(log(Observations)+1.5),
+    SIC = -0.5 * BIC,
+    expSIC = exp(SIC - max(SIC)),
+    BF = exp(SIC - dplyr::lead(SIC)),
+    cmPk = expSIC / sum(expSIC)
+  ) %>% 
+  select(Title, Parameters, LL, BIC, aBIC, CAIC, AWE, BLRT_PValue, T11_VLMR_PValue, BF, cmPk) %>% 
+  arrange(Parameters)
+
+
+
+allFit_main_standard %>% 
+  mutate(Title = str_remove(Title, " LCA Enumeration ")) %>% 
+  gt() %>%
+  tab_header(
+    title = md("<b>Model Fit Summary Table: All States 2013 - 2024</b>"), 
+    subtitle = md("Standard model")) %>% 
+  cols_label(
+    Title = "Classes",
+    Parameters = md("Par"),
+    LL = md("*LL*"),
+    T11_VLMR_PValue = "VLMR",
+    BLRT_PValue = "BLRT",
+    BF = md("BF"),
+    cmPk = md("*cmPk*")#,
+#    Entropy = md("Entropy")
+)%>%
+  tab_footnote(
+    footnote = md(
+    "*Note.* Par = parameters; *LL* = log likelihood;
+      BIC = bayesian information criterion;
+      aBIC = sample size adjusted BIC; CAIC = consistent Akaike information criterion;
+      AWE = approximate weight of evidence criterion;
+      BLRT = bootstrapped likelihood ratio test p-value;
+      VLMR = Vuong-Lo-Mendell-Rubin adjusted likelihood ratio test p-value;
+      cmPk = approximate correct model probability."), 
+    locations = cells_title()) %>% 
+  tab_options(column_labels.font.weight = "bold") %>% 
+  fmt_number(10,decimals = 2,
+             drop_trailing_zeros=TRUE,
+             suffixing = TRUE) %>% 
+  fmt_number(c(3:9,11), 
+             decimals = 0) %>% 
+  sub_missing(1:11,
+              missing_text = "--") %>% 
+  fmt(c(8:9,11),
+    fns = function(x) 
+    ifelse(x<0.001, "<.001",
+           scales::number(x, accuracy = 0.01))) %>%
+  fmt(10, fns = function(x) 
+    ifelse(x>100, ">100",
+           scales::number(x, accuracy = .1))) 
+
+```
+
+```{r , fig.width=7, fig.height=7, out.extra="width=0.9\\linewidth"}
+#| label: LCA resuls by state and year
+#| echo: false
+#| warning: false
+
+lca4_sd <-  state |> inner_join(lca_main_standard$c4_lca_standard.out$savedata,
+                             by = 'ID')
+
+
+#Recoded
+lca4_sd$lawtype_sd[lca4_sd$C == 3] <- 0 #States without RML
+lca4_sd$lawtype_sd[lca4_sd$C == 1] <- 1 #Early legalization
+lca4_sd$lawtype_sd[lca4_sd$C == 2] <- 2 #More regulated than 1
+lca4_sd$lawtype_sd[lca4_sd$C == 4] <- 3 #More regulated than 2
+
+
+table(lca4_sd$C, lca4_sd$lawtype_sd)
+
+
+rmlyear <- cannabispol_subset |>
+  arrange((styr)) |> 
+  group_by(stabbr) |> 
+  filter(rml == 1) |> 
+  dplyr::slice(1) |> 
+  ungroup()
+
+rmlslyear <- cannabispol_subset |> 
+  arrange((styr)) |> 
+  group_by(stabbr)  |> 
+  filter(rmlsl == 1)  |> 
+  dplyr::slice(1) |> 
+  ungroup()
+
+
+cols <-  c("0" = "#CBD5E8",
+           "1" = "#FDCDAC",
+           "2" = "#B3E2CD",
+           "3" = "#F4CAE4")
+
+
+#c("#F8766D",  # reddish
+#  "#7CAE00",  # green
+##  "#00BFC4",  # cyan/teal
+#  "#C77CFF")  # purple
+
+cols <- c( "0" = "#B3CDE3", 
+           "1" = "#FBB4AE", 
+           "2" = "#CCEBC5", 
+           "3" = "#DECBE4")
+
+cols <- c("0" = "#F8766D",
+          "1" = "#7CAE00",
+          "2" = "#00BFC4",
+          "3" = "#C77CFF")
+
+
+cols <- c("0" = "#dddddd",
+          "1" = "#FFB000",
+          "2" = "#19c691",
+          "3" = "#ba91ff")
+
+#c("0" = "#F8766D",  # reddish
+#  "1" = "#7CAE00",  # green
+#  "2" = "#00BFC4",  # cyan/teal
+#  "3" = "#C77CFF")  # purple
+
+lca4_sd_gp <- 
+  ggplot(lca4_sd, 
+         mapping = aes(x = as.factor(year),
+                       y = stabbr,
+                       fill = as.factor(lawtype_sd)
+                       )
+         ) +
+  geom_tile(color = "gray100") +
+  geom_tile(
+    data = rmlyear,
+    mapping = aes(x = as.factor(year), y = stabbr,
+                  linetype = "RCL start"),
+    #shape = 15,
+    linewidth = 0.25,
+    color = "black",
+    fill = NA,
+    inherit.aes = FALSE
+    ) +
+  geom_point(
+    data = rmlslyear,
+   mapping =  aes(x = as.factor(year), y = stabbr,
+                  shape = "RCL sales start"),
+    shape = 15,
+    size = 1,
+    color = "black",
+ #   show.legend = TRUE,
+   inherit.aes = FALSE
+   ) +
+  scale_y_discrete(limits = rev) +
+  scale_fill_manual(values = cols,
+                    labels = c("Class 1", "Class 2", "Class 3", "Class 4")) +
+ # scale_shape_manual(
+#    name = "",
+#    values = c("RCL sales start" = 15),   # solid circle
+#    labels = c("RCL sales start" = "RCL Sales Start")
+#  ) +
+  scale_linetype_manual(
+    name = "",
+    values = c("RCL start" = 1),   # solid line (used for rectangle outline)
+    labels = c("RCL start" = "RCL Start")
+  ) +
+  scale_shape_manual(
+    name = "",
+    values = c("RCL sales start" = 15),   # solid line (used for rectangle outline)
+    labels = c("RCL sales start" = "RCL sales start")
+  ) +
+  theme_minimal() +
+  labs(x = "Year",
+       y = "State",
+       fill = "Latent Class",
+       title = "Standard LCA all states-years 2013-2024")
+
+
+lca4_sd_gp
+
+```
+
+```{r , fig.width=7, fig.height=8, out.extra="width=0.9\\linewidth"}
+
+# 1) a dummy point inside the panel so ggplot can draw a legend key for "RCL start"
+dummy_pt <- with(lca4_sd, data.frame(
+  year   = as.factor(sort(unique(year))[1]),
+  stabbr = sort(unique(stabbr))[1]
+))
+
+lca4_sd_gp <-
+  ggplot(lca4_sd, aes(x = as.factor(year), y = stabbr,
+                      fill = as.factor(lawtype_sd))) +
+  geom_tile(color = "gray100") +
+  
+  # draw the rectangle outline in the plot, but NO legend from this layer
+  geom_tile(
+    data = rmlyear,
+    aes(x = as.factor(year), y = stabbr),
+    linewidth = 0.25, color = "black", fill = NA,
+    inherit.aes = FALSE, show.legend = FALSE
+  ) +
+  
+  # actual sales start squares (will provide one legend entry)
+  geom_point(
+    data = rmlslyear,
+    aes(x = as.factor(year), y = stabbr, shape = "Sales start"),
+    color = "black", size = 1.2, inherit.aes = FALSE
+  ) +
+  
+  # legend-only entry for RCL start (invisible on plot, but appears in legend)
+  geom_point(
+    data = dummy_pt,
+    aes(x = year, y = stabbr, shape = "RCL start"),
+    color = "black", size = 0, alpha = 0, inherit.aes = FALSE
+  ) +
+  
+  scale_y_discrete(limits = rev) +
+  scale_fill_manual(values = cols,
+                    labels = c("1: No RCL","2: Pre-commercial","3: Full Access","4: Dispensary Access"),
+                    name   = "Latent Class") +
+  
+  # ONE combined legend block for both markers
+  scale_shape_manual(
+    name   = "",
+    breaks = c("RCL start","Sales start"),
+    values = c("RCL start" = 0,  # open square = law enacted
+               "Sales start" = 15),  # filled square = sales start
+    labels = c("RCL start"  = "RCL starts",
+               "Sales start" = "RCL sales start")
+  ) +
+  
+  guides(
+    fill  = guide_legend(order = 1,
+                         byrow = TRUE, 
+                         keyheight = unit(10, "pt")),
+    shape = guide_legend(order = 2,
+                         byrow = TRUE,
+                         override.aes = list(size = 3, color = "black", alpha = 1),
+                         keyheight = unit(11, "pt"))
+  ) +
+  theme_minimal() +
+  theme(
+    legend.spacing.y  = unit(3, "pt"),       # no extra gap between rows
+    legend.key.height = unit(10, "pt"),
+    legend.box.spacing = unit(4, "pt")
+  ) +
+  labs(x = "Year", y = "State",
+       title = "Standard LCA all states-years 2013–2024")
+
+lca4_sd_gp
+
+```
+
+### Examples by state
+
+### Nevada
+
+```{r , fig.width=9, fig.height=1.2, out.extra="width=0.9\\linewidth"}
+#| label: LCA resuls for nevada by year
+#| echo: false
+#| warning: false
+
+lca4_sd_nv <-  subset(lca4_sd, stabbr == "NV" ) 
+rmlyear_nv <-  subset(rmlyear, stabbr == "NV" ) 
+rmlslyear_nv <- subset(rmlslyear, stabbr == "NV" ) 
+
+
+
+cols <- c("0" = "#dddddd",
+          "1" = "#FFB000",
+          "2" = "#19c691",
+          "3" = "#ba91ff")
+
+#c("0" = "#F8766D",  # reddish
+#  "1" = "#7CAE00",  # green
+#  "2" = "#00BFC4",  # cyan/teal
+#  "3" = "#C77CFF")  # purple
+
+lca4_sd_nv_gp <- 
+  ggplot(lca4_sd_nv, 
+         mapping = aes(x = as.factor(year),
+                       y = stabbr,
+                       fill = as.factor(lawtype_sd)
+                       )
+         ) +
+  geom_tile(color = "gray100") +
+  geom_tile(
+    data = rmlyear_nv,
+    mapping = aes(x = as.factor(year), y = stabbr,
+                  linetype = "RCL start"),
+    #shape = 15,
+    linewidth = 0.25,
+    color = "black",
+    fill = NA,
+    inherit.aes = FALSE
+    ) +
+  geom_point(
+    data = rmlslyear_nv,
+   mapping =  aes(x = as.factor(year), y = stabbr,
+                  shape = "RCL sales start"),
+    shape = 15,
+    size = 1,
+    color = "black",
+ #   show.legend = TRUE,
+   inherit.aes = FALSE
+   ) +
+  scale_y_discrete(limits = rev) +
+  scale_fill_manual(values = cols,
+                    labels = c("Class 1", "Class 2", "Class 3", "Class 4")) +
+ # scale_shape_manual(
+#    name = "",
+#    values = c("RCL sales start" = 15),   # solid circle
+#    labels = c("RCL sales start" = "RCL Sales Start")
+#  ) +
+  scale_linetype_manual(
+    name = "",
+    values = c("RCL start" = 1),   # solid line (used for rectangle outline)
+    labels = c("RCL start" = "RCL Start")
+  ) +
+  scale_shape_manual(
+    name = "",
+    values = c("RCL sales start" = 15),   # solid line (used for rectangle outline)
+    labels = c("RCL sales start" = "RCL sales start")
+  ) +
+  theme_minimal() +
+  labs(x = "Year",
+       y = "State",
+       fill = "Latent Class",
+       title = "Standard LCA all states-years 2013-2024")
+
+
+lca4_sd_nv_gp
+
+```
+
+### Colorado
+
+```{r , fig.width=9, fig.height=1.2, out.extra="width=0.9\\linewidth"}
+#| label: LCA resuls for Colorado and year
+#| echo: false
+#| warning: false
+
+lca4_sd_co <-  subset(lca4_sd, stabbr == "CO" ) 
+rmlyear_co <-  subset(rmlyear, stabbr == "CO" ) 
+rmlslyear_co <- subset(rmlslyear, stabbr == "CO" ) 
+
+
+
+cols <- c("0" = "#dddddd",
+          "1" = "#FFB000",
+          "2" = "#19c691",
+          "3" = "#ba91ff")
+
+#c("0" = "#F8766D",  # reddish
+#  "1" = "#7CAE00",  # green
+#  "2" = "#00BFC4",  # cyan/teal
+#  "3" = "#C77CFF")  # purple
+
+lca4_sd_co_gp <- 
+  ggplot(lca4_sd_co, 
+         mapping = aes(x = as.factor(year),
+                       y = stabbr,
+                       fill = as.factor(lawtype_sd)
+                       )
+         ) +
+  geom_tile(color = "gray100") +
+  geom_tile(
+    data = rmlyear_co,
+    mapping = aes(x = as.factor(year), y = stabbr,
+                  linetype = "RCL start"),
+    #shape = 15,
+    linewidth = 0.25,
+    color = "black",
+    fill = NA,
+    inherit.aes = FALSE
+    ) +
+  geom_point(
+    data = rmlslyear_co,
+   mapping =  aes(x = as.factor(year), y = stabbr,
+                  shape = "RCL sales start"),
+    shape = 15,
+    size = 1,
+    color = "black",
+ #   show.legend = TRUE,
+   inherit.aes = FALSE
+   ) +
+  scale_y_discrete(limits = rev) +
+  scale_fill_manual(values = cols,
+                    labels = c("Class 1", "Class 2", "Class 3", "Class 4")) +
+ # scale_shape_manual(
+#    name = "",
+#    values = c("RCL sales start" = 15),   # solid circle
+#    labels = c("RCL sales start" = "RCL Sales Start")
+#  ) +
+  scale_linetype_manual(
+    name = "",
+    values = c("RCL start" = 1),   # solid line (used for rectangle outline)
+    labels = c("RCL start" = "RCL Start")
+  ) +
+  scale_shape_manual(
+    name = "",
+    values = c("RCL sales start" = 15),   # solid line (used for rectangle outline)
+    labels = c("RCL sales start" = "RCL sales start")
+  ) +
+  theme_minimal() +
+  labs(x = "Year",
+       y = "State",
+       fill = "Latent Class",
+       title = "Standard LCA all states-years 2013-2024")
+
+
+lca4_sd_co_gp
+
+
+
+```
+
+### Maine
+
+```{r , fig.width=9, fig.height=1.2, out.extra="width=0.9\\linewidth"}
+#| label: LCA resuls for Maine by year
+#| echo: false
+#| warning: false
+
+lca4_sd_me <-  subset(lca4_sd, stabbr == "ME" ) 
+rmlyear_me <-  subset(rmlyear, stabbr == "ME" ) 
+rmlslyear_me <- subset(rmlslyear, stabbr == "ME" ) 
+
+
+
+cols <- c("0" = "#dddddd",
+          "1" = "#FFB000",
+          "2" = "#19c691",
+          "3" = "#ba91ff")
+
+#c("0" = "#F8766D",  # reddish
+#  "1" = "#7CAE00",  # green
+#  "2" = "#00BFC4",  # cyan/teal
+#  "3" = "#C77CFF")  # purple
+
+lca4_sd_me_gp <- 
+  ggplot(lca4_sd_me, 
+         mapping = aes(x = as.factor(year),
+                       y = stabbr,
+                       fill = as.factor(lawtype_sd)
+                       )
+         ) +
+  geom_tile(color = "gray100") +
+  geom_tile(
+    data = rmlyear_me,
+    mapping = aes(x = as.factor(year), y = stabbr,
+                  linetype = "RCL start"),
+    #shape = 15,
+    linewidth = 0.25,
+    color = "black",
+    fill = NA,
+    inherit.aes = FALSE
+    ) +
+  geom_point(
+    data = rmlslyear_me,
+   mapping =  aes(x = as.factor(year), y = stabbr,
+                  shape = "RCL sales start"),
+    shape = 15,
+    size = 1,
+    color = "black",
+ #   show.legend = TRUE,
+   inherit.aes = FALSE
+   ) +
+  scale_y_discrete(limits = rev) +
+  scale_fill_manual(values = cols,
+                    labels = c("Class 1", "Class 2", "Class 3", "Class 4")) +
+ # scale_shape_manual(
+#    name = "",
+#    values = c("RCL sales start" = 15),   # solid circle
+#    labels = c("RCL sales start" = "RCL Sales Start")
+#  ) +
+  scale_linetype_manual(
+    name = "",
+    values = c("RCL start" = 1),   # solid line (used for rectangle outline)
+    labels = c("RCL start" = "RCL Start")
+  ) +
+  scale_shape_manual(
+    name = "",
+    values = c("RCL sales start" = 15),   # solid line (used for rectangle outline)
+    labels = c("RCL sales start" = "RCL sales start")
+  ) +
+  theme_minimal() +
+  labs(x = "Year",
+       y = "State",
+       fill = "Latent Class",
+       title = "Standard LCA all states-years 2013-2024")
+
+
+lca4_sd_me_gp
+
+```
+
+#### Item endorsement probability by class
+
+```{r}
+
+probabilities <- lca_main_standard$c4_lca_standard.out$parameters$probability.scale
+
+itemprobability <- probabilities %>%
+  mutate(
+    # map 3→1, 1→2, 2→3, 4→4 by releveling then relabeling
+    LatentClassRecoded = factor(LatentClass, levels = c(3, 1, 2, 4), labels = 1:4)
+  ) %>%
+  select(param, category, est, LatentClassRecoded) %>%
+  pivot_wider(
+    names_from  = LatentClassRecoded,
+    values_from = est,
+    names_prefix = "Class ",
+    names_expand = TRUE, names_sort = TRUE
+  ) %>%
+  select(param, category, `Class 1`, `Class 2`, `Class 3`, `Class 4`)
+
+
+print(itemprobability, n = 52)
+
+```
+
+#### Item endorsement probability graphs
+
+```{r}
+#| label: Prepare lables and data for radar graph
+#| warning: false
+
+probabilities$itemcat <- paste(probabilities$param, probabilities$category)
+
+
+#label_map <- c(
+#  "ADGN 2"   = "Advertising - P/C",
+#  "ADGN 3"   = "Advertising - Both",
+#  "DRVPR2 2" = "Driving - No specific",
+#  "DRVPR2 3" = "Driving - No THC",
+#  "DRVPR2 4" = "Driving - THC lim",
+#  "HMDL 2"   = "Home Delivery - Allowed",
+#  "HMDL 3"   = "Home Delivery - Prohibited",
+#  "LCAUTH 2" = "Local opt - Control only",
+#  "LCAUTH 3" = "Local opt - Both",
+#  "OPNCN 2"  = "Open containers in vehicles no law",
+#  "OPNCN 3"  = "Open containers in vehicles prohibited",
+#  "PBLUS 2"  = "Public Use - Prohibited",
+#  "PBLUS 3"  = "Public Use - Restricted",
+#  "PKWRN 2"  = "Packaging or warning required",
+#  "PRCNG 2"  = "Pricing controls",
+#  "RTL 2"    = "Retail use - Off-prem",
+#  "RTL 3"    = "Retail - Off + On",
+#  "TAX2 2"  = "Tax - Sales only",
+#  "TAX2 3"    = "Tax - Weight only",
+#  "TAX2 4"    = "Tax - Sales + Weight",
+#  "TAX2 5"    = "Tax - Potency",
+#  "THCLIM 2"    = "Potency limits"
+#)
+
+# Create lables for the categories
+
+label_map <- c(
+  "LCAUTH 2" = "Local opt - Ctrl",
+  "LCAUTH 3" = "Local opt - Both",
+  "THCLIM 2" = "THC lim",
+  "RTL 2"    = "Rtl - Off",
+  "RTL 3"    = "Rtl - Off+On",
+  "PBLUS 2"  = "Public use - Restr",
+  "PBLUS 3"  = "Public use - Proh",
+  "HMDL 2"   = "Delivery - Restr",
+  "HMDL 3"   = "Delivery - Proh",
+  "TAX2 2"   = "Tax - Sales",
+  "TAX2 3"   = "Tax - Weight",
+  "TAX2 4"   = "Tax - S+W",
+  "TAX2 5"   = "Tax - Potency",
+  "PRCNG 2"  = "Pricing - Ctrl",
+  "PKWRN 2"  = "Pack/warn - Req",
+  "ADGN 2"   = "Mkt - P/C",
+  "ADGN 3"   = "Mkt - Both",
+  "DRVPR2 2" = "Driving - None",
+  "DRVPR2 3" = "Driving - No THC",
+  "DRVPR2 4" = "Driving - THC lim",
+  "OPNCN 2"  = "Open cont - No law",
+  "OPNCN 3"  = "Open cont - Proh"
+)
+
+
+
+#Remove the reference category
+probabilities2 <- subset(probabilities, category !=1)
+probabilities2 <- subset(probabilities2, itemcat  != "DRVPR2 2" )
+probabilities2 <- subset(probabilities2, itemcat  != "OPNCN 2" )
+
+
+#Recoded
+probabilities2$LatentClass_recoded[probabilities2$LatentClass == 3] <- 1 #States without RML
+probabilities2$LatentClass_recoded[probabilities2$LatentClass == 1] <- 2 #Early legalization
+probabilities2$LatentClass_recoded[probabilities2$LatentClass == 2] <- 3 #More regulated than 1
+probabilities2$LatentClass_recoded[probabilities2$LatentClass == 4] <- 4 #More regulated than 2
+
+
+
+
+```
+
+##### Plot for latent class 2
+
+```{r, fig.width=8, fig.height=5, out.extra="width=0.9\\linewidth"}
+#| label: radar plot for LCA1
+#| warning: false
+
+# Latent class 2
+lca2_plot_df <- subset(probabilities2, LatentClass_recoded==2)
+
+
+plot_df <- lca2_plot_df |> 
+  mutate(itemcat = factor(itemcat)) |> 
+  group_by(itemcat) |> 
+  mutate(sum_est_param = sum(est, na.rm = TRUE)) |>   # for ordering
+  ungroup()
+
+plot_df <- plot_df %>%
+  mutate(
+    itemcat_lab = dplyr::recode(itemcat, !!!label_map),
+    itemcat_lab = factor(
+      itemcat_lab,
+      levels = c(
+        "Local opt - Ctrl",
+        "Local opt - Both",
+        "THC lim",
+        "Rtl - Off",
+        "Rtl - Off+On",
+        "Public use - Restr",
+        "Public use - Proh",
+        "Delivery - Restr",
+        "Delivery - Proh",
+        "Tax - Sales",
+        "Tax - Weight",
+        "Tax - S+W",
+        "Tax - Potency",
+        "Pricing - Ctrl",
+        "Pack/warn - Req",
+        "Mkt - P/C",
+        "Mkt - Both",
+        "Driving - None",
+        "Driving - No THC",
+        "Driving - THC lim",
+        "Open cont - No law",
+        "Open cont - Proh"
+      )
+    )
+  )
+
+max_r <- max(plot_df$est, na.rm = TRUE)
+max_r <- ceiling(max_r * 1.1 * 10) / 10               # pad & round to 0.1s
+grid_breaks <- seq(0, max_r, length.out = 4)  
+
+lt2 <- ggplot(plot_df) +
+  # custom radial gridlines
+  geom_hline(
+    aes(yintercept = y),
+    data = data.frame(y = seq(0, max(plot_df$est, na.rm = TRUE), length.out = 4)),
+    color = "lightgrey", linewidth = 0.3
+  ) +
+
+  # bars: est by itemcat for each param
+  geom_col(
+    aes(
+      x = str_wrap(itemcat_lab, 6),
+      y = est,
+      fill = itemcat
+    ),
+    position = position_dodge2(width = 0.9, preserve = "single"),
+    alpha = 0.9,
+    width = 0.85
+  ) +
+  # Annotate custom scale inside plot
+  #annotate(
+  #  x = 11.7, 
+   # y = 0.5, 
+  #  label = "0.5", 
+  #  geom = "text", 
+  #  color = "gray12",
+  #  size = 3
+#    family = "Bell MT"
+  #) +
+  #annotate(
+  ##  x = 11.7, 
+  #  y =1, 
+  #  label = "1", 
+  #  geom = "text", 
+  #  color = "gray12",
+  #  size = 3
+#    family = "Bell MT"
+  #) +
+
+  coord_polar() +
+  labs(x = NULL, y = NULL, fill = NULL) +
+  theme_minimal(base_size = 11) +
+  theme(
+    panel.grid = element_blank(),
+    axis.text.y = element_blank(),
+    axis.text.x = element_text(size = 8),
+    legend.position = "none"   # remove legend
+  )
+
+lt2 + labs(title = "Pre-commercial model")
+```
+
+```{r}
+
+
+library(tibble)
+
+key_df <- tribble(
+  ~label,                ~description,
+  "Local opt - Ctrl",    "Local control authorized",
+  "Local opt - Both",    "Local opt-out and control authorized",
+  "THC lim",             "THC limits apply",
+  "Rtl - Off",           "Off-premises sales allowed only",
+  "Rtl - Off+On",        "On- and off-premises sales allowed",
+  "Public use - Restr",  "Public use restricted",
+  "Public use - Proh",   "Public use prohibited",
+  "Delivery - Restr",    "Home delivery allowed",
+  "Delivery - Proh",     "Home delivery prohibited",
+  "Tax - Sales",         "Sales-based taxes",
+  "Tax - Weight",        "Weight-based taxes",
+  "Tax - S+W",           "Sales + weight-based taxes",
+  "Tax - Potency",       "Potency-based taxes",
+  "Pricing - Ctrl",      "Price controls in place",
+  "Pack/warn - Req",     "THC & serving size on label required",
+  "Mkt - P/C",           "Ad Placement or content restricted",
+  "Mkt - Both",          "Ad Placement and content restricted",
+  "Driving - None",      "General driving prohibitions",
+  "Driving - No THC",    "No THC limits, evidence required",
+  "Driving - THC lim",   "THC limits specified",
+  "Open cont - No law",  "No law on open containers",
+  "Open cont - Proh",    "Open containers prohibited"
+)
+
+
+
+```
+
+```{r}
+
+plot_df <- plot_df %>%
+  left_join(key_df, by = c("itemcat_lab" = "label"))
+
+caption_text <- paste0(
+  key_df$label, ": ", key_df$description, collapse = "; "
+)
+
+lt2 +
+  labs(caption = caption_text) +
+  theme(
+    plot.caption = element_text(hjust = 0, size = 7, color = "gray30")
+  )
+
+```
+
+```{r, fig.width=8, fig.height=5, out.extra="width=0.9\\linewidth"}
+#| label: radar plot for LCA3
+#| warning: false
+
+# Latent class 3
+lca3_plot_df <- subset(probabilities2, LatentClass_recoded==3)
+
+
+plot_df <- lca3_plot_df |> 
+  mutate(itemcat = factor(itemcat)) |> 
+  group_by(itemcat) |> 
+  mutate(sum_est_param = sum(est, na.rm = TRUE)) |>   # for ordering
+  ungroup()
+
+#plot_df <- plot_df %>%
+#  mutate(itemcat_lab = recode(itemcat, !!!label_map))
+
+plot_df <- plot_df %>%
+  mutate(
+    itemcat_lab = dplyr::recode(itemcat, !!!label_map),
+    itemcat_lab = factor(
+      itemcat_lab,
+      levels = c(
+        "Local opt - Ctrl",
+        "Local opt - Both",
+        "THC lim",
+        "Rtl - Off",
+        "Rtl - Off+On",
+        "Public use - Restr",
+        "Public use - Proh",
+        "Delivery - Restr",
+        "Delivery - Proh",
+        "Tax - Sales",
+        "Tax - Weight",
+        "Tax - S+W",
+        "Tax - Potency",
+        "Pricing - Ctrl",
+        "Pack/warn - Req",
+        "Mkt - P/C",
+        "Mkt - Both",
+        "Driving - None",
+        "Driving - No THC",
+        "Driving - THC lim",
+        "Open cont - No law",
+        "Open cont - Proh"
+      )
+    )
+  )
+
+max_r <- max(plot_df$est, na.rm = TRUE)
+max_r <- ceiling(max_r * 1.1 * 10) / 10               # pad & round to 0.1s
+grid_breaks <- seq(0, max_r, length.out = 4)  
+
+lt3 <- ggplot(plot_df) +
+  # custom radial gridlines
+  geom_hline(
+    aes(yintercept = y),
+    data = data.frame(y = seq(0, max(plot_df$est, na.rm = TRUE), length.out = 4)),
+    color = "lightgrey", linewidth = 0.3
+  ) +
+
+  # bars: est by itemcat for each param
+  geom_col(
+    aes(
+      x = str_wrap(itemcat_lab, 6),
+      y = est,
+      fill = itemcat
+    ),
+    position = position_dodge2(width = 0.9, preserve = "single"),
+    alpha = 0.9,
+    width = 0.85
+  ) +
+
+  # optional: a faint radial guide per param (turn on if you like)
+  # geom_segment(
+  #   aes(
+  #     x = reorder(itemcat, sum_est_param),
+  #     xend = reorder(itemcat, sum_est_param),
+  #     y = 0, yend = max_r
+  #   ),
+  #   linetype = "dashed", color = "gray30", linewidth = 0.2
+  # ) +
+
+  coord_polar() +
+  labs(x = NULL, y = NULL, fill = NULL) +
+  theme_minimal(base_size = 11) +
+  theme(
+    panel.grid = element_blank(),
+    axis.text.y = element_blank(),
+    axis.text.x = element_text(size = 8),
+    legend.position = "none"   # remove legend
+  )
+
+lt3 + labs(title = "Full access model")
+
+```
+
+```{r, fig.width=8, fig.height=5, out.extra="width=0.9\\linewidth"}
+#| label: radar plot for LCA4
+#| warning: false
+
+# Latent class 3
+lca4_plot_df <- subset(probabilities2, LatentClass_recoded==4)
+
+
+plot_df <- lca4_plot_df |> 
+  mutate(itemcat = factor(itemcat)) |> 
+  group_by(itemcat) |> 
+  mutate(sum_est_param = sum(est, na.rm = TRUE)) |>   # for ordering
+  ungroup()
+
+#plot_df <- plot_df %>%
+#  mutate(itemcat_lab = recode(itemcat, !!!label_map))
+
+plot_df <- plot_df %>%
+  mutate(
+    itemcat_lab = dplyr::recode(itemcat, !!!label_map),
+    itemcat_lab = factor(
+      itemcat_lab,
+      levels = c(
+        "Local opt - Ctrl",
+        "Local opt - Both",
+        "THC lim",
+        "Rtl - Off",
+        "Rtl - Off+On",
+        "Public use - Proh",
+        "Public use - Restr",
+        "Delivery - Restr",
+        "Delivery - Proh",
+        "Tax - Sales",
+        "Tax - Weight",
+        "Tax - S+W",
+        "Tax - Potency",
+        "Pricing - Ctrl",
+        "Pack/warn - Req",
+        "Mkt - P/C",
+        "Mkt - Both",
+        "Driving - None",
+        "Driving - No THC",
+        "Driving - THC lim",
+        "Open cont - No law",
+        "Open cont - Proh"
+      )
+    )
+  )
+
+max_r <- max(plot_df$est, na.rm = TRUE)
+max_r <- ceiling(max_r * 1.1 * 10) / 10               # pad & round to 0.1s
+grid_breaks <- seq(0, max_r, length.out = 4)  
+
+lt4 <- ggplot(plot_df) +
+  # custom radial gridlines
+  geom_hline(
+    aes(yintercept = y),
+    data = data.frame(y = seq(0, max(plot_df$est, na.rm = TRUE), length.out = 4)),
+    color = "lightgrey", linewidth = 0.3
+  ) +
+
+  # bars: est by itemcat for each param
+  geom_col(
+    aes(
+      x = str_wrap(itemcat_lab, 6),
+      y = est,
+      fill = itemcat
+    ),
+    position = position_dodge2(width = 0.9, preserve = "single"),
+    alpha = 0.9,
+    width = 0.85
+  ) +
+
+  # optional: a faint radial guide per param (turn on if you like)
+  # geom_segment(
+  #   aes(
+  #     x = reorder(itemcat, sum_est_param),
+  #     xend = reorder(itemcat, sum_est_param),
+  #     y = 0, yend = max_r
+  #   ),
+  #   linetype = "dashed", color = "gray30", linewidth = 0.2
+  # ) +
+
+  coord_polar() +
+  labs(x = NULL, y = NULL, fill = NULL) +
+  theme_minimal(base_size = 11) +
+  theme(
+    panel.grid = element_blank(),
+    axis.text.y = element_blank(),
+    axis.text.x = element_text(size = 8),
+    legend.position = "none"   # remove legend
+  )
+
+lt4 + labs(title = "Dispensary Access Model")
+```
+
+# Supplement material
+
+## Multilevel results
+
+```{r}
+#| label: LCA multilevel models
+#| echo: false
+#| warning: false
+
+
+lca_main_multilevel <-  readModels(here("results", "s2", "ml"), quiet = TRUE)
+
+
+enum_summary_main_multilevel <-  LatexSummaryTable(
+  lca_main_multilevel,
+  keepCols = c(
+    "Title",
+    "Parameters",
+    "LL",
+    "BIC",
+    "aBIC",
+    #"BLRT_PValue",
+    "T11_VLMR_PValue",
+    "Observations"#,
+    #"Entropy"
+  ),
+  sortBy = "Title"
+)
+
+
+
+allFit_main_multilevel <- enum_summary_main_multilevel %>% 
+  mutate(
+    aBIC = -2*LL + Parameters*log((Observations+2)/24),
+    CAIC = -2*LL + Parameters*(log(Observations)+1),
+    AWE = -2*LL + 2*Parameters*(log(Observations)+1.5),
+    SIC = -0.5 * BIC,
+    expSIC = exp(SIC - max(SIC)),
+    BF = exp(SIC - dplyr::lead(SIC)),
+    cmPk = expSIC / sum(expSIC)
+  ) %>% 
+  select(Title, Parameters, LL, BIC, aBIC, CAIC, AWE, #BLRT_PValue, 
+         T11_VLMR_PValue, BF, cmPk
+         ) %>% 
+  arrange(Parameters)
+
+
+
+allFit_main_multilevel %>% 
+  mutate(Title = str_remove(Title, " LCA Enumeration ")) %>% 
+  gt() %>%
+  tab_header(
+    title = md("<b>Model Fit Summary Table: All States 2013 - 2024</b>"), 
+    subtitle = md("Multilevel model")) %>% 
+  cols_label(
+    Title = "Classes",
+    Parameters = md("Par"),
+    LL = md("*LL*"),
+    T11_VLMR_PValue = "VLMR"#,
+   # BLRT_PValue = "BLRT",
+    #BF = md("BF"),
+  #  cmPk = md("*cmPk*")#,
+#    Entropy = md("Entropy")
+)%>%
+  tab_footnote(
+    footnote = md(
+    "*Note.* Par = parameters; *LL* = log likelihood;
+      BIC = bayesian information criterion;
+      aBIC = sample size adjusted BIC; CAIC = consistent Akaike information criterion;
+      AWE = approximate weight of evidence criterion;
+      VLMR = Vuong-Lo-Mendell-Rubin adjusted likelihood ratio test p-value."), 
+    locations = cells_title()) %>% 
+  tab_options(column_labels.font.weight = "bold") %>% 
+  fmt_number(10,decimals = 2,
+             drop_trailing_zeros=TRUE,
+             suffixing = TRUE) %>% 
+  fmt_number(c(3:9,10), 
+             decimals = 0) %>% 
+  sub_missing(1:10,
+              missing_text = "--") %>% 
+  fmt(c(8:9,10),
+    fns = function(x) 
+    ifelse(x<0.001, "<.001",
+           scales::number(x, accuracy = 0.01))) %>%
+  fmt(10, fns = function(x) 
+    ifelse(x>100, ">100",
+           scales::number(x, accuracy = .1))) 
+
+
+
+```
+
+```{r , fig.width=7, fig.height=7, out.extra="width=0.9\\linewidth"}
+#| label: LCA multilevel models plot recoded
+#| echo: false
+#| warning: false
+
+lca4_ml <-  state |> inner_join(lca_main_multilevel$c4_lca_multilevel.out$savedata,
+                             by = 'ID')
+
+
+#Recoded
+lca4_ml$lawtype_ml[lca4_ml$C == 1] <- 0 #States that havent legalized
+lca4_ml$lawtype_ml[lca4_ml$C == 3] <- 1 #Early legalization
+lca4_ml$lawtype_ml[lca4_ml$C == 4] <- 2 #More regulated than 1
+lca4_ml$lawtype_ml[lca4_ml$C == 2] <- 3 #More regulated than 2
+
+
+table(lca4_ml$C, lca4_ml$lawtype_ml)
+
+
+rmlyear <- cannabispol_subset |>
+  arrange((styr)) |> 
+  group_by(stabbr) |> 
+  filter(rml == 1) |> 
+  dplyr::slice(1) |> 
+  ungroup()
+
+rmlslyear <- cannabispol_subset |> 
+  arrange((styr)) |> 
+  group_by(stabbr)  |> 
+  filter(rmlsl == 1)  |> 
+  dplyr::slice(1) |> 
+  ungroup()
+
+
+cols <-  c("0" = "#CBD5E8",
+           "1" = "#FDCDAC",
+           "2" = "#B3E2CD",
+           "3" = "#F4CAE4")
+
+
+#c("#F8766D",  # reddish
+#  "#7CAE00",  # green
+##  "#00BFC4",  # cyan/teal
+#  "#C77CFF")  # purple
+
+cols <- c( "0" = "#B3CDE3", 
+           "1" = "#FBB4AE", 
+           "2" = "#CCEBC5", 
+           "3" = "#DECBE4")
+
+cols <- c("0" = "#F8766D",
+          "1" = "#7CAE00",
+          "2" = "#00BFC4",
+          "3" = "#C77CFF")
+
+
+cols <- c("0" = "#dddddd",
+          "1" = "#FFB000",
+          "2" = "#19c691",
+          "3" = "#ba91ff")
+
+#c("0" = "#F8766D",  # reddish
+#  "1" = "#7CAE00",  # green
+#  "2" = "#00BFC4",  # cyan/teal
+#  "3" = "#C77CFF")  # purple
+
+lca4_ml_gp <- 
+  ggplot(lca4_ml, 
+         mapping = aes(x = as.factor(year),
+                       y = stabbr,
+                       fill = as.factor(lawtype_ml)
+                       )
+         ) +
+  geom_tile(color = "gray100") +
+  geom_tile(
+    data = rmlyear,
+    mapping = aes(x = as.factor(year), y = stabbr,
+                  linetype = "RCL start"),
+    #shape = 15,
+    linewidth = 0.25,
+    color = "black",
+    fill = NA,
+    inherit.aes = FALSE
+    ) +
+  geom_point(
+    data = rmlslyear,
+   mapping =  aes(x = as.factor(year), y = stabbr,
+                  shape = "RCL sales start"),
+    shape = 15,
+    size = 1,
+    color = "black",
+ #   show.legend = TRUE,
+   inherit.aes = FALSE
+   ) +
+  scale_y_discrete(limits = rev) +
+  scale_fill_manual(values = cols,
+                    labels = c("Class 1", "Class 2", "Class 3", "Class 4")) +
+ # scale_shape_manual(
+#    name = "",
+#    values = c("RCL sales start" = 15),   # solid circle
+#    labels = c("RCL sales start" = "RCL Sales Start")
+#  ) +
+  scale_linetype_manual(
+    name = "",
+    values = c("RCL start" = 1),   # solid line (used for rectangle outline)
+    labels = c("RCL start" = "RCL Start")
+  ) +
+  scale_shape_manual(
+    name = "",
+    values = c("RCL sales start" = 15),   # solid line (used for rectangle outline)
+    labels = c("RCL sales start" = "RCL sales start")
+  ) +
+  theme_minimal() +
+  labs(x = "Year",
+       y = "State",
+       fill = "Latent Class",
+       title = "Multilevel LCA all states-years 2013-2024")
+
+
+lca4_ml_gp
+```
+
+```{r , fig.width=7, fig.height=7, out.extra="width=0.9\\linewidth"}
+#| label: LCA multilevel models plot with labels
+#| echo: false
+#| warning: false
+
+#library(grid)
+# 1) a dummy point inside the panel so ggplot can draw a legend key for "RCL start"
+dummy_pt <- with(lca4_ml, data.frame(
+  year   = as.factor(sort(unique(year))[1]),
+  stabbr = sort(unique(stabbr))[1]
+))
+
+lca4_ml_gp <-
+  ggplot(lca4_ml, aes(x = as.factor(year), y = stabbr,
+                      fill = as.factor(lawtype_ml))) +
+  geom_tile(color = "gray100") +
+  
+  # draw the rectangle outline in the plot, but NO legend from this layer
+  geom_tile(
+    data = rmlyear,
+    aes(x = as.factor(year), y = stabbr),
+    linewidth = 0.25, color = "black", fill = NA,
+    inherit.aes = FALSE, show.legend = FALSE
+  ) +
+  
+  # actual sales start squares (will provide one legend entry)
+  geom_point(
+    data = rmlslyear,
+    aes(x = as.factor(year), y = stabbr, shape = "Sales start"),
+    color = "black", size = 1.2, inherit.aes = FALSE
+  ) +
+  
+  # legend-only entry for RCL start (invisible on plot, but appears in legend)
+  geom_point(
+    data = dummy_pt,
+    aes(x = year, y = stabbr, shape = "RCL start"),
+    color = "black", size = 0, alpha = 0, inherit.aes = FALSE
+  ) +
+  
+  scale_y_discrete(limits = rev) +
+  scale_fill_manual(values = cols,
+                    labels = c("Class 1","Class 2","Class 3","Class 4"),
+                    name   = "Latent Class") +
+  
+  # ONE combined legend block for both markers
+  scale_shape_manual(
+    name   = "",
+    breaks = c("RCL start","Sales start"),
+    values = c("RCL start" = 0,  # open square = law enacted
+               "Sales start" = 15),  # filled square = sales start
+    labels = c("RCL start"  = "RCL starts",
+               "Sales start" = "RCL sales start")
+  ) +
+  
+  guides(
+    fill  = guide_legend(order = 1,
+                         byrow = TRUE, 
+                         keyheight = unit(10, "pt")),
+    shape = guide_legend(order = 2,
+                         byrow = TRUE,
+                         override.aes = list(size = 3, color = "black", alpha = 1),
+                         keyheight = unit(11, "pt"))
+  ) +
+  theme_minimal() +
+  theme(
+    legend.spacing.y  = unit(3, "pt"),       # no extra gap between rows
+    legend.key.height = unit(10, "pt"),
+    legend.box.spacing = unit(4, "pt")
+  ) +
+  labs(x = "Year", y = "State",
+       title = "Multilevel LCA all states-years 2013–2024")
+
+lca4_ml_gp
+
+```
+
+```{r}
+#| label: probabilities_ml
+
+#Recoded
+#lca4_ml$lawtype_ml[lca4_ml$C == 1] <- 0 #States that havent legalized
+#lca4_ml$lawtype_ml[lca4_ml$C == 3] <- 1 #Early legalization
+#lca4_ml$lawtype_ml[lca4_ml$C == 4] <- 2 #More regulated than 1
+#lca4_ml$lawtype_ml[lca4_ml$C == 2] <- 3 #More regulated than 2
+
+probabilities_ml <- lca_main_multilevel$c4_lca_multilevel.out$parameters$probability.scale
+
+
+probabilities_ml$LatentClass_recoded[probabilities_ml$LatentClass  == 1] <- 1 #States that havent legalized
+probabilities_ml$LatentClass_recoded[probabilities_ml$LatentClass  == 4] <- 3 #More regulated than 2
+probabilities_ml$LatentClass_recoded[probabilities_ml$LatentClass  == 3] <- 2 #Early legalization
+probabilities_ml$LatentClass_recoded[probabilities_ml$LatentClass  == 2] <- 4 #More regulated than 3
+
+
+
+probabilities_ml <- probabilities_ml |>
+  select(param, category, est, LatentClass_recoded) |>
+  pivot_wider(names_from = LatentClass_recoded,
+              values_from = est,
+              names_prefix = "Class")
+
+
+print(probabilities_ml, n = 52)
+
+```
+
+## Results without DC
+
+```{r , fig.width=7, fig.height=7, out.extra="width=0.9\\linewidth"}
+#| label: LCA multilevel without DC models plot
+#| echo: false
+#| warning: false
+
+
+lca_noDC_multilevel <-  readModels(here("results", "noDC", "ml"), quiet = TRUE)
+
+
+state_noDC  <- subset(state, stabbr != "DC")
+
+lca4_noDC_ml <-  state_noDC |> inner_join(lca_noDC_multilevel$savedata,
+                             by = 'ID')
+
+probabilities_noDC_ml <- lca_noDC_multilevel$parameters$probability.scale
+
+# probabilities_noDC_ml <- probabilities_noDC_ml |>
+#   select(param, category, est, LatentClass ) |>
+#   pivot_wider(names_from = LatentClass ,
+#               values_from = est,
+#               names_prefix = "Class")
+
+
+itemprobability_noDC_ml <- probabilities_noDC_ml %>%
+  mutate(
+    # map 3→1, 1→2, 2→3, 4→4 by releveling then relabeling
+    LatentClassRecoded = factor(LatentClass, levels = c(3, 4, 1, 2), labels = 1:4)
+  ) %>%
+  select(param, category, est, LatentClassRecoded) %>%
+  pivot_wider(
+    names_from  = LatentClassRecoded,
+    values_from = est,
+    names_prefix = "Class ",
+    names_expand = TRUE, names_sort = TRUE
+  ) %>%
+  select(param, category, `Class 1`, `Class 2`, `Class 3`, `Class 4`)
+
+
+print(itemprobability_noDC_ml, n = 52)
+
+
+#Recoded
+lca4_noDC_ml$lawtype_ml[lca4_noDC_ml$C == 3] <- 0 #States that havent legalized
+lca4_noDC_ml$lawtype_ml[lca4_noDC_ml$C == 4] <- 1 #Early legalization
+lca4_noDC_ml$lawtype_ml[lca4_noDC_ml$C == 1] <- 2 #More regulated than 1
+lca4_noDC_ml$lawtype_ml[lca4_noDC_ml$C == 2] <- 3 #More regulated than 2
+
+
+table(lca4_ml$C, lca4_ml$lawtype_ml)
+
+
+rmlyear <- cannabispol_subset |>
+  arrange((styr)) |> 
+  group_by(stabbr) |> 
+  filter(rml == 1) |> 
+  dplyr::slice(1) |> 
+  ungroup()
+
+rmlyear <- subset(rmlyear, stabbr!="DC")
+
+rmlslyear <- cannabispol_subset |> 
+  arrange((styr)) |> 
+  group_by(stabbr)  |> 
+  filter(rmlsl == 1)  |> 
+  dplyr::slice(1) |> 
+  ungroup()
+
+# cols <-  c("0" = "#CBD5E8",
+#            "1" = "#FDCDAC",
+#            "2" = "#B3E2CD",
+#            "3" = "#F4CAE4")
+
+
+#c("#F8766D",  # reddish
+#  "#7CAE00",  # green
+##  "#00BFC4",  # cyan/teal
+#  "#C77CFF")  # purple
+
+# cols <- c( "0" = "#B3CDE3", 
+#            "1" = "#FBB4AE", 
+#            "2" = "#CCEBC5", 
+#            "3" = "#DECBE4")
+# 
+# cols <- c("0" = "#F8766D",
+#           "1" = "#7CAE00",
+#           "2" = "#00BFC4",
+#           "3" = "#C77CFF")
+
+
+cols <- c("0" = "#dddddd",
+          "1" = "#FFB000",
+          "2" = "#19c691",
+          "3" = "#ba91ff")
+
+#c("0" = "#F8766D",  # reddish
+#  "1" = "#7CAE00",  # green
+#  "2" = "#00BFC4",  # cyan/teal
+#  "3" = "#C77CFF")  # purple
+
+lca4_no_DC_ml_gp <- 
+  ggplot(lca4_noDC_ml, 
+         mapping = aes(x = as.factor(year),
+                       y = stabbr,
+                       fill = as.factor(lawtype_ml)
+                       )
+         ) +
+  geom_tile(color = "gray100") +
+  geom_tile(
+    data = rmlyear,
+    mapping = aes(x = as.factor(year), y = stabbr,
+                  linetype = "RCL start"),
+    #shape = 15,
+    linewidth = 0.25,
+    color = "black",
+    fill = NA,
+    inherit.aes = FALSE
+    ) +
+  geom_point(
+    data = rmlslyear,
+   mapping =  aes(x = as.factor(year), y = stabbr,
+                  shape = "RCL sales start"),
+    shape = 15,
+    size = 1,
+    color = "black",
+ #   show.legend = TRUE,
+   inherit.aes = FALSE
+   ) +
+  scale_y_discrete(limits = rev) +
+  scale_fill_manual(values = cols,
+                    labels = c("Class 1", "Class 2", "Class 3", "Class 4")) +
+ # scale_shape_manual(
+#    name = "",
+#    values = c("RCL sales start" = 15),   # solid circle
+#    labels = c("RCL sales start" = "RCL Sales Start")
+#  ) +
+   # ONE combined legend block for both markers
+  scale_shape_manual(
+    name   = "",
+    breaks = c("RCL start","Sales start"),
+    values = c("RCL start" = 0,  # open square = law enacted
+               "Sales start" = 15),  # filled square = sales start
+    labels = c("RCL start"  = "RCL starts",
+               "Sales start" = "RCL sales start")
+  ) +
+  
+  # scale_linetype_manual(
+  #   name = "",
+  #   values = c("RCL start" = 1),   # solid line (used for rectangle outline)
+  #   labels = c("RCL start" = "RCL Start")
+  # ) +
+  # scale_shape_manual(
+  #   name = "",
+  #   values = c("RCL sales start" = 15),   # solid line (used for rectangle outline)
+  #   labels = c("RCL sales start" = "RCL sales start")
+  # ) +
+  theme_minimal() +
+  labs(x = "Year",
+       y = "State",
+       fill = "Latent Class",
+       title = "Multilevel LCA all states-years excluding DC 2013-2024")
+
+
+lca4_no_DC_ml_gp
+```
+
+```{r, fig.width=7, fig.height=7, out.extra="width=0.9\\linewidth"}
+#| label: standard without DC models plot
+#| echo: false
+#| warning: false
+
+
+#lca_noDC_multilevel <-  readModels(here("results", "noDC", "ml"), quiet = TRUE)
+
+
+lca_noDC_standard <-  readModels(here("results", "noDC", "sd"), quiet = TRUE)
+
+state_noDC  <- subset(state, stabbr != "DC")
+
+results_noDC <-  state |> inner_join(lca_noDC_standard$c4_lca_standard.out$savedata, by = 'ID')
+
+
+t#able(results_noDC$C)
+
+
+probabilities_noDC_sd <- lca_noDC_standard$c4_lca_standard.out$parameters$probability.scale
+
+
+
+itemprobability_noDC_sd <- probabilities_noDC_sd %>%
+  mutate(
+    # map 3→1, 1→2, 2→3, 4→4 by releveling then relabeling
+    LatentClassRecoded = factor(LatentClass, levels = c(1, 2, 3, 4), labels = 1:4)
+  ) %>%
+  select(param, category, est, LatentClassRecoded) %>%
+  pivot_wider(
+    names_from  = LatentClassRecoded,
+    values_from = est,
+    names_prefix = "Class ",
+    names_expand = TRUE, names_sort = TRUE
+  ) %>%
+  select(param, category, `Class 1`, `Class 2`, `Class 3`, `Class 4`)
+
+
+print(itemprobability_noDC_sd, n = 52)
+
+
+#Recoded
+results_noDC$lawtype_sd[results_noDC$C == 3] <- 0 #States that havent legalized
+results_noDC$lawtype_sd[results_noDC$C == 1] <- 1 #Pre-commercial
+results_noDC$lawtype_sd[results_noDC$C == 2] <- 2 #Full Access
+results_noDC$lawtype_sd[results_noDC$C == 4] <- 3 #Dispensary Access
+
+
+table(results_noDC$C, results_noDC$lawtype_sd)
+
+
+rmlyear <- cannabispol_subset |>
+  arrange((styr)) |> 
+  group_by(stabbr) |> 
+  filter(rml == 1) |> 
+  dplyr::slice(1) |> 
+  ungroup()
+
+rmlyear <- subset(rmlyear, stabbr!="DC")
+
+rmlslyear <- cannabispol_subset |> 
+  arrange((styr)) |> 
+  group_by(stabbr)  |> 
+  filter(rmlsl == 1)  |> 
+  dplyr::slice(1) |> 
+  ungroup()
+
+# cols <-  c("0" = "#CBD5E8",
+#            "1" = "#FDCDAC",
+#            "2" = "#B3E2CD",
+#            "3" = "#F4CAE4")
+
+
+#c("#F8766D",  # reddish
+#  "#7CAE00",  # green
+##  "#00BFC4",  # cyan/teal
+#  "#C77CFF")  # purple
+
+# cols <- c( "0" = "#B3CDE3", 
+#            "1" = "#FBB4AE", 
+#            "2" = "#CCEBC5", 
+#            "3" = "#DECBE4")
+# 
+# cols <- c("0" = "#F8766D",
+#           "1" = "#7CAE00",
+#           "2" = "#00BFC4",
+#           "3" = "#C77CFF")
+
+
+cols <- c("0" = "#dddddd",
+          "1" = "#FFB000",
+          "2" = "#19c691",
+          "3" = "#ba91ff")
+
+#c("0" = "#F8766D",  # reddish
+#  "1" = "#7CAE00",  # green
+#  "2" = "#00BFC4",  # cyan/teal
+#  "3" = "#C77CFF")  # purple
+
+lca4_no_DC_sd_gp <- 
+  ggplot(results_noDC, 
+         mapping = aes(x = as.factor(year),
+                       y = stabbr,
+                       fill = as.factor(lawtype_sd)
+                       )
+         ) +
+  geom_tile(color = "gray100") +
+  geom_tile(
+    data = rmlyear,
+    mapping = aes(x = as.factor(year), y = stabbr,
+                  linetype = "RCL start"),
+    #shape = 15,
+    linewidth = 0.25,
+    color = "black",
+    fill = NA,
+    inherit.aes = FALSE
+    ) +
+  geom_point(
+    data = rmlslyear,
+   mapping =  aes(x = as.factor(year), y = stabbr,
+                  shape = "RCL sales start"),
+    shape = 15,
+    size = 1,
+    color = "black",
+ #   show.legend = TRUE,
+   inherit.aes = FALSE
+   ) +
+  scale_y_discrete(limits = rev) +
+  scale_fill_manual(values = cols,
+                    labels = c("Class 1", "Class 2", "Class 3", "Class 4")) +
+ # scale_shape_manual(
+#    name = "",
+#    values = c("RCL sales start" = 15),   # solid circle
+#    labels = c("RCL sales start" = "RCL Sales Start")
+#  ) +
+   # ONE combined legend block for both markers
+  scale_shape_manual(
+    name   = "",
+    breaks = c("RCL start","Sales start"),
+    values = c("RCL start" = 0,  # open square = law enacted
+               "Sales start" = 15),  # filled square = sales start
+    labels = c("RCL start"  = "RCL starts",
+               "Sales start" = "RCL sales start")
+  ) +
+  
+  # scale_linetype_manual(
+  #   name = "",
+  #   values = c("RCL start" = 1),   # solid line (used for rectangle outline)
+  #   labels = c("RCL start" = "RCL Start")
+  # ) +
+  # scale_shape_manual(
+  #   name = "",
+  #   values = c("RCL sales start" = 15),   # solid line (used for rectangle outline)
+  #   labels = c("RCL sales start" = "RCL sales start")
+  # ) +
+  theme_minimal() +
+  labs(x = "Year",
+       y = "State",
+       fill = "Latent Class",
+       title = "Standard LCA all states-years excluding DC 2013-2024")
+
+
+lca4_no_DC_sd_gp
+```
+
+## Results 2020-2024
+
+### Standard
+
+```{r, fig.width=5, fig.height=8, out.extra="width=0.9\\linewidth"}
+#| label: LCA standard models plot 2020 2024
+#| echo: false
+#| warning: false
+
+
+lca_2020_2024_sd <-  readModels(here("results", "2020_2024", "sd"), quiet = TRUE)
+
+
+state_2020_2024 <- subset(state, year>2019)
+
+lca4_2020_2024_state <-  state_2020_2024 |> inner_join(lca_2020_2024_sd$savedata, by = 'ID')
+
+#Recoded
+lca4_2020_2024_state$lawtype_sd[lca4_2020_2024_state$C == 4] <- 0 #States that havent legalized
+lca4_2020_2024_state$lawtype_sd[lca4_2020_2024_state$C == 3] <- 1 #Early legalization
+lca4_2020_2024_state$lawtype_sd[lca4_2020_2024_state$C == 1] <- 2 #More regulated than 1
+lca4_2020_2024_state$lawtype_sd[lca4_2020_2024_state$C == 2] <- 3 #More regulated than 2
+
+cols <- c("0" = "#dddddd",
+          "1" = "#FFB000",
+          "2" = "#19c691",
+          "3" = "#ba91ff")
+
+lca4_sd_2020_2024_gp <- 
+  ggplot(lca4_2020_2024_state, 
+         mapping = aes(x = as.factor(year),
+                       y = stabbr,
+                       fill = as.factor(lawtype_sd)
+                       )
+         ) +
+  geom_tile(color = "gray100") +
+ # geom_tile(
+#    data = rsdyear,
+#    mapping = aes(x = as.factor(year), y = stabbr),
+#    #shape = 15,
+#    linewidth = 0.25,
+#    color = "black",
+#    fill = NA,
+#    inherit.aes = FALSE
+#    ) +
+#  geom_point(
+#    data = rsdslyear,
+#   mapping =  aes(x = as.factor(year), y = stabbr),
+#    shape = 15,
+#    size = 1,
+#    color = "black",
+#    show.legend = FALSE,
+#   inherit.aes = FALSE
+ #  ) +
+  scale_y_discrete(limits = rev) +
+  scale_fill_manual(values = cols,
+                    labels = c("Class 1", "Class 2", "Class 3", "Class 4")) +
+  theme_minimal() +
+  labs(x = "Year",
+       y = "State",
+       fill = "Latent Class",
+       title = "Standard LCA all states-years 2020-2024")
+
+
+lca4_sd_2020_2024_gp
+
+```
+
+### Multilevel
+
+```{r, fig.width=5, fig.height=8, out.extra="width=0.9\\linewidth"}
+#| label: LCA multilevel models plot 2020 2024
+#| echo: false
+#| warning: false
+
+
+lca_2020_2024_ml <-  readModels(here("results", "2020_2024", "ml"), quiet = TRUE)
+
+
+state_2020_2024 <- subset(state, year>2019)
+
+lca4_2020_2024_state <-  state_2020_2024 |> inner_join(lca_2020_2024_ml$savedata, by = 'ID')
+
+#Recoded
+lca4_2020_2024_state$lawtype_ml[lca4_2020_2024_state$C == 4] <- 0 #States that havent legalized
+lca4_2020_2024_state$lawtype_ml[lca4_2020_2024_state$C == 3] <- 1 #Early legalization
+lca4_2020_2024_state$lawtype_ml[lca4_2020_2024_state$C == 2] <- 2 #More regulated than 1
+lca4_2020_2024_state$lawtype_ml[lca4_2020_2024_state$C == 1] <- 3 #More regulated than 2
+
+
+cols <- c("0" = "#dddddd",
+          "1" = "#FFB000",
+          "2" = "#19c691",
+          "3" = "#ba91ff")
+
+lca4_ml_2020_2024_gp <- 
+  ggplot(lca4_2020_2024_state, 
+         mapping = aes(x = as.factor(year),
+                       y = stabbr,
+                       fill = as.factor(lawtype_ml)
+                       )
+         ) +
+  geom_tile(color = "gray100") +
+ # geom_tile(
+#    data = rmlyear,
+#    mapping = aes(x = as.factor(year), y = stabbr),
+#    #shape = 15,
+#    linewidth = 0.25,
+#    color = "black",
+#    fill = NA,
+#    inherit.aes = FALSE
+#    ) +
+#  geom_point(
+#    data = rmlslyear,
+#   mapping =  aes(x = as.factor(year), y = stabbr),
+#    shape = 15,
+#    size = 1,
+#    color = "black",
+#    show.legend = FALSE,
+#   inherit.aes = FALSE
+ #  ) +
+  scale_y_discrete(limits = rev) +
+  scale_fill_manual(values = cols,
+                    labels = c("Class 1", "Class 2", "Class 3", "Class 4")) +
+  theme_minimal() +
+  labs(x = "Year",
+       y = "State",
+       fill = "Latent Class",
+       title = "Multilevel LCA all states-years 2020-2024")
+
+
+lca4_ml_2020_2024_gp
+
+```
+
+## Results in RCL states
+
+```{r , fig.width=7, fig.height=5, out.extra="width=0.9\\linewidth"}
+
+
+results_rcl_all <-  readModels(here("results", "rcl"), quiet = TRUE)
+
+
+results_RCL <- results_rcl_all$c4_lca_rcl.out$savedata
+
+
+results_RCL <-  state |> inner_join(results_RCL,
+                                             by = 'ID')
+
+
+results_RCL$C_recoded[results_RCL$C == 3] <- 0 #States without RML
+results_RCL$C_recoded[results_RCL$C == 4] <- 1 #Early legalization
+results_RCL$C_recoded[results_RCL$C == 1] <- 2 #More regulated than 1
+results_RCL$C_recoded[results_RCL$C == 2] <- 3 #More regulated than 2
+
+###########
+
+cols <- c("0" = "#dddddd",
+          "1" = "#FFB000",
+          "2" = "#19c691",
+          "3" = "#ba91ff")
+
+
+lca4_rcl_gp <- 
+  ggplot(results_RCL, 
+         mapping = aes(x = as.factor(year),
+                       y = stabbr,
+                       fill = as.factor(C_recoded)
+         )
+  ) +
+  geom_tile(color = "gray100") +
+  scale_y_discrete(limits = rev) +
+  scale_fill_manual(values = cols,
+                    labels = c("Class 1", "Class 2", "Class 3", "Class 4")) +
+  # scale_shape_manual(
+  theme_minimal() +
+  labs(x = "Year",
+       y = "State",
+       fill = "Latent Class",
+       title = "Standard LCA in RCL states 2013-2024")
+
+
+lca4_rcl_gp
+```
+
+## Results by year
+
+```{r, fig.width=5, fig.height=8, out.extra="width=0.9\\linewidth"}
+
+results_yr <-  readModels(here("results", "yr"), quiet = TRUE)
+
+
+
+
+
+results_yr_2020 <- results_yr$c4_lca_2020.out$savedata
+
+results_yr_2020$year
+
+#Recoded
+
+results_yr_2021 <- results_yr$c4_lca_2021.out$savedata
+results_yr_2022 <- results_yr$c4_lca_2022.out$savedata
+results_yr_2023 <- results_yr$c4_lca_2023.out$savedata
+results_yr_2024 <- results_yr$c4_lca_2024.out$savedata
+
+results_yr_2024$C_recoded[results_yr_2024$C == 4] <- 0 #States without RML
+results_yr_2024$C_recoded[results_yr_2024$C == 2] <- 1 #Early legalization
+results_yr_2024$C_recoded[results_yr_2024$C == 3] <- 2 #More regulated than 1
+results_yr_2024$C_recoded[results_yr_2024$C == 1] <- 3 #More regulated than 2
+
+results_yr_2023$C_recoded[results_yr_2023$C == 4] <- 0 #States without RML
+results_yr_2023$C_recoded[results_yr_2023$C == 3] <- 1 #Early legalization
+results_yr_2023$C_recoded[results_yr_2023$C == 2] <- 2 #More regulated than 1
+results_yr_2023$C_recoded[results_yr_2023$C == 1] <- 3 #More regulated than 2
+
+results_yr_2022$C_recoded[results_yr_2022$C == 2] <- 0 #States without RML
+results_yr_2022$C_recoded[results_yr_2022$C == 4] <- 1 #Early legalization
+results_yr_2022$C_recoded[results_yr_2022$C == 3] <- 2 #More regulated than 1
+results_yr_2022$C_recoded[results_yr_2022$C == 1] <- 3 #More regulated than 2
+
+results_yr_2021$C_recoded[results_yr_2021$C == 3] <- 0 #States without RML
+results_yr_2021$C_recoded[results_yr_2021$C == 4] <- 1 #Early legalization
+results_yr_2021$C_recoded[results_yr_2021$C == 2] <- 2 #More regulated than 1
+results_yr_2021$C_recoded[results_yr_2021$C == 1] <- 3 #More regulated than 2
+
+results_yr_2020$C_recoded[results_yr_2020$C == 4] <- 0 #States without RML
+results_yr_2020$C_recoded[results_yr_2020$C == 1] <- 1 #Early legalization
+results_yr_2020$C_recoded[results_yr_2020$C == 2] <- 2 #More regulated than 1
+results_yr_2020$C_recoded[results_yr_2020$C == 3] <- 3 #More regulated than 2
+
+
+results_yr_2020_2024 <- rbind(results_yr_2020, results_yr_2021, results_yr_2022,
+                              results_yr_2023, results_yr_2024)
+
+results_yr_2020_2024 <-  state |> inner_join(results_yr_2020_2024,
+                                by = 'ID')
+
+
+cols <- c("0" = "#dddddd",
+          "1" = "#FFB000",
+          "2" = "#19c691",
+          "3" = "#ba91ff")
+
+#results_yr_2020$C_recoded <- as.factor(results_yr_2020$C_recoded)
+
+lca_yr_2020_2024_gp <- 
+  ggplot(results_yr_2020_2024, 
+         mapping =  aes(x = as.factor(year),
+                       y = stabbr,
+                       fill = as.factor(C_recoded)
+         )
+  ) +
+  geom_tile(color = "gray100") +
+  # geom_tile(
+  #   data = rmlyear,
+  #   mapping = aes(x = as.factor(year), y = stabbr,
+  #                 linetype = "RCL start"),
+  #   #shape = 15,
+  #   linewidth = 0.25,
+  #   color = "black",
+  #   fill = NA,
+  #   inherit.aes = FALSE
+  # ) +
+  # geom_point(
+  #   data = rmlslyear,
+  #   mapping =  aes(x = as.factor(year), y = stabbr,
+  #                  shape = "RCL sales start"),
+  #   shape = 15,
+  #   size = 1,
+  #   color = "black",
+  #   #   show.legend = TRUE,
+  #   inherit.aes = FALSE
+  # ) +
+  scale_y_discrete(limits = rev) +
+  scale_fill_manual(values = cols,
+                    labels = c("Class 1", "Class 2", "Class 3", "Class 4")) +
+  # scale_shape_manual(
+  #    name = "",
+  #    values = c("RCL sales start" = 15),   # solid circle
+  #    labels = c("RCL sales start" = "RCL Sales Start")
+  #  ) +
+  # scale_linetype_manual(
+  #   name = "",
+  #   values = c("RCL start" = 1),   # solid line (used for rectangle outline)
+  #   labels = c("RCL start" = "RCL Start")
+  # ) +
+  # scale_shape_manual(
+  #   name = "",
+  #   values = c("RCL sales start" = 15),   # solid line (used for rectangle outline)
+  #   labels = c("RCL sales start" = "RCL sales start")
+  # ) +
+  theme_minimal() +
+  labs(x = "Year",
+       y = "State",
+       fill = "Latent Class",
+       title = "Standard LCA all states-years 2020-2024")
+
+
+lca_yr_2020_2024_gp
+
+
+plot_df <- results_yr_2020_2024 |>
+  dplyr::mutate(
+    year = factor(year),
+    C_recoded = factor(C_recoded, levels = c(1,2,3,4))  # or as.character if your levels are "1"-"4"
+  )
+
+
+```
